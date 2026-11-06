@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import Janela from './Janela.astro';
 import { SITE } from '../lib/site';
 
 const sugestoes = [
@@ -22,12 +23,8 @@ const sugestoes = [
       </p>
     </div>
 
-    <form class="terminal lg:col-span-7" data-terminal novalidate>
-      <div class="terminal-topo">
-        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span>nova-ideia</span>
-      </div>
-      <div class="terminal-corpo">
+    <Janela titulo="nova-ideia" variante="terminal" class="lg:col-span-7">
+      <form class="terminal-corpo" data-terminal novalidate>
         <p class="linha-sis" aria-hidden="true"><span class="prompt">codehouse ~ $</span> nova-ideia --enviar whatsapp</p>
         <label for="ideia" class="linha-sis mt-3 block text-nevoa">Descreva sua ideia:</label>
         <div class="campo">
@@ -48,8 +45,8 @@ const sugestoes = [
             <Icon name="whatsapp" size={20} /> Enviar pelo WhatsApp
           </button>
         </div>
-      </div>
-    </form>
+      </form>
+    </Janela>
   </div>
 </section>
 
@@ -58,10 +55,6 @@ const sugestoes = [
   .cta-fundo { position: absolute; inset: 0; mask-image: linear-gradient(90deg, transparent, #000 40%, #000 70%, transparent); opacity: 0.8; }
   .cta-titulo { font-size: clamp(2.6rem, 6.2vw, 5rem); font-weight: 400; letter-spacing: -0.01em; }
 
-  .terminal { border: 1px solid var(--color-linha-forte); border-radius: 14px; overflow: hidden; background: color-mix(in srgb, var(--color-noite) 92%, transparent); box-shadow: 0 40px 100px -40px color-mix(in srgb, var(--color-noite) 90%, transparent); }
-  .terminal-topo { display: flex; align-items: center; gap: 0.9rem; padding: 0.7rem 1rem; border-bottom: 1px solid var(--color-linha); font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-nevoa-2); }
-  .dots { display: inline-flex; gap: 6px; }
-  .dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--color-linha-forte); }
   .terminal-corpo { padding: 1.5rem; }
   @media (min-width: 640px) { .terminal-corpo { padding: 2rem; } }
   .linha-sis { font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-nevoa-2); }
