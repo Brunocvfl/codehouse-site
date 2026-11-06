@@ -17,9 +17,9 @@ const {
   image = '/og-image.png',
 } = Astro.props;
 
-const fullTitle = title ? `${title} | Code House` : 'Code House | Sites, sistemas web e aplicações';
-const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
-const ogImage = new URL(image, Astro.site ?? SITE.url).href;
+const fullTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} | Sites, sistemas web e aplicações`;
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const ogImage = new URL(image, SITE.url).href;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -48,7 +48,7 @@ const jsonLd = {
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
-    <meta property="og:site_name" content="Code House" />
+    <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
