@@ -16,6 +16,16 @@ _Avoid_: mensagem padrão, prefixo
 O que o visitante quer tratar, escrito depois da Saudação; vem do serviço escolhido, da ideia digitada ou do padrão.
 _Avoid_: msg, texto
 
+## Serviços
+
+**Serviço**:
+Um formato de entrega que a Code House oferece, como site institucional ou landing page.
+_Avoid_: produto, plano, formato
+
+**Catálogo de Serviços**:
+A lista dos Serviços oferecidos; todo Projeto pertence a um deles.
+_Avoid_: menu de serviços, tipos
+
 ## Portfólio
 
 **Projeto**:
