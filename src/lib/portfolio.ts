@@ -1,11 +1,19 @@
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { filtrarDestaques, montarProjetos, type ComRota } from './portfolio-regras';
 
-/** Projetos publicados (draft: false), ordenados por "order" e depois pelo ano mais recente. */
-export async function getProjetos() {
-  const todos = await getCollection('portfolio', ({ data }) => !data.draft);
-  return todos.sort((a, b) => a.data.order - b.data.order || b.data.year - a.data.year);
+/** Projeto publicado: a entrada do Astro + href e rotulo prontos. */
+export type Projeto = ComRota<CollectionEntry<'portfolio'>>;
+
+/** Projetos publicados, na ordem do portfólio. */
+export async function getProjetos(): Promise<Projeto[]> {
+  return montarProjetos(await getCollection('portfolio'));
 }
 
-export async function getDestaques(limite = 3) {
-  return (await getProjetos()).filter((p) => p.data.featured).slice(0, limite);
+export async function getDestaques(limite = 3): Promise<Projeto[]> {
+  return filtrarDestaques(await getProjetos(), limite);
+}
+
+/** Caminhos para o getStaticPaths de /portfolio/[slug]. */
+export async function getCaminhos() {
+  return (await getProjetos()).map((projeto) => ({ params: { slug: projeto.id }, props: { projeto } }));
 }

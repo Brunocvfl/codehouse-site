@@ -2,7 +2,8 @@
 import { Image } from 'astro:assets';
 import logo from '../assets/brand/logo.png';
 import Icon from './Icon.astro';
-import { NAV, whatsappLink } from '../lib/site';
+import { NAV } from '../lib/site';
+import { whatsappLink } from '../lib/whatsapp';
 ---
 <header class="topo fixed inset-x-0 top-0 z-40" data-topo>
   <a href="#conteudo" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded focus:bg-nevoa focus:px-3 focus:py-2 focus:text-noite">
@@ -31,7 +32,7 @@ import { NAV, whatsappLink } from '../lib/site';
 
 <style>
   .topo { transition: background-color 0.25s ease, border-color 0.25s ease; border-bottom: 1px solid transparent; }
-  .topo.rolou { background: rgb(7 13 36 / 0.82); border-color: var(--color-linha); backdrop-filter: blur(12px); }
+  .topo.rolou { background: color-mix(in srgb, var(--color-noite) 82%, transparent); border-color: var(--color-linha); backdrop-filter: blur(12px); }
 </style>
 
 <script>

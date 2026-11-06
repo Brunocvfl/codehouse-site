@@ -10,6 +10,8 @@
   --color-noite: #070d24;
   --color-noite-2: #0b1433;
   --color-noite-3: #101b44;
+  --color-noite-painel: #08102c; /* fundo de plantas e janelas de código */
+  --color-noite-funda: #050a1d;  /* fundo de campos de texto */
   --color-indigo: #1c1a5e;
   --color-telhado: #7b52c9;
   --color-telhado-claro: #b39af0;
@@ -17,6 +19,7 @@
   --color-codigo-claro: #9bd6f2;
   --color-chaves: #e0745a;
   --color-chaves-forte: #ef8d74;
+  --color-sobre-chaves: #1a0c08; /* texto sobre botões coral */
   --color-nevoa: #eef1fa;
   --color-nevoa-2: #a9b3d6;
   --color-linha: #1e2a5c;
@@ -75,8 +78,8 @@
   /* Malha de blueprint: fundo técnico das seções */
   .malha {
     background-image:
-      linear-gradient(rgb(86 180 224 / 0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(86 180 224 / 0.06) 1px, transparent 1px);
+      linear-gradient(color-mix(in srgb, var(--color-codigo) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--color-codigo) 6%, transparent) 1px, transparent 1px);
     background-size: 48px 48px;
   }
 
@@ -93,14 +96,16 @@
     padding: 0.95rem 1.5rem;
     border-radius: 0.5rem;
     background: var(--color-chaves);
-    color: #1a0c08;
+    color: var(--color-sobre-chaves);
     font-weight: 600;
     line-height: 1.2;
     transition: background-color 0.15s ease, box-shadow 0.2s ease;
   }
   .btn-acao:hover {
     background: var(--color-chaves-forte);
-    box-shadow: 0 0 0 4px rgb(224 116 90 / 0.18), 0 10px 30px -10px rgb(224 116 90 / 0.6);
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--color-chaves) 18%, transparent),
+      0 10px 30px -10px color-mix(in srgb, var(--color-chaves) 60%, transparent);
   }
 
   .btn-linha {

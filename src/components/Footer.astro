@@ -1,15 +1,17 @@
 ---
 import Icon from './Icon.astro';
-import { NAV, SITE, whatsappLink } from '../lib/site';
+import { NAV, SITE } from '../lib/site';
+import { whatsappLink, whatsappExibicao } from '../lib/whatsapp';
 const year = new Date().getFullYear();
 
-// Cada letra do domínio recebe sua cor do degradê da marca (azul > roxo > coral).
-const paradas = [[0x56, 0xb4, 0xe0], [0x7b, 0x52, 0xc9], [0xe0, 0x74, 0x5a]];
+// Cada letra do domínio recebe sua cor do degradê da marca (codigo > telhado > chaves),
+// misturada no CSS a partir dos tokens do @theme.
+const paradas = ['--color-codigo', '--color-telhado', '--color-chaves'];
 const corEm = (t: number) => {
   const s = t < 0.6 ? 0 : 1;
   const local = s === 0 ? t / 0.6 : (t - 0.6) / 0.4;
-  const [a, b] = [paradas[s], paradas[s + 1]];
-  return `rgb(${a.map((v, k) => Math.round(v + (b[k] - v) * local)).join(',')})`;
+  const pct = (local * 100).toFixed(1);
+  return `color-mix(in srgb, var(${paradas[s + 1]}) ${pct}%, var(${paradas[s]}))`;
 };
 const letras = [...SITE.domain].map((ch, i, arr) => ({ ch, cor: corEm(i / (arr.length - 1)) }));
 ---
@@ -31,7 +33,7 @@ const letras = [...SITE.domain].map((ch, i, arr) => ({ ch, cor: corEm(i / (arr.l
     <ul class="space-y-3 text-sm md:col-span-4">
       <li>
         <a href={whatsappLink()} target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-nevoa-2 hover:text-nevoa">
-          <Icon name="whatsapp" size={18} class="text-chaves" /> +55 11 95374-4237
+          <Icon name="whatsapp" size={18} class="text-chaves" /> {whatsappExibicao}
         </a>
       </li>
       <li>
