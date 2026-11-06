@@ -1,5 +1,5 @@
 ---
-import { whatsappLink } from '../lib/site';
+import { whatsappLink } from '../lib/whatsapp';
 
 const servicos = [
   {
@@ -9,7 +9,7 @@ const servicos = [
     descricao:
       'Quem vocês são, o que fazem e como falar com vocês, num site que passa confiança e aparece no Google.',
     recebe: ['Domínio e hospedagem configurados', 'Layout próprio, adaptado ao celular', 'SEO básico e Google Analytics'],
-    msg: 'Olá, Code House! Quero um site institucional para o meu negócio.',
+    assunto: 'Quero um site institucional para o meu negócio.',
   },
   {
     id: 'landing',
@@ -18,7 +18,7 @@ const servicos = [
     descricao:
       'Uma página focada em vender, captar contatos ou agendar. Cada bloco existe para levar o visitante até o botão.',
     recebe: ['Texto orientado à conversão', 'Carregamento rápido no celular', 'WhatsApp, pixel e analytics integrados'],
-    msg: 'Olá, Code House! Quero uma landing page para uma oferta.',
+    assunto: 'Quero uma landing page para uma oferta.',
   },
   {
     id: 'sistemas',
@@ -27,7 +27,7 @@ const servicos = [
     descricao:
       'Painéis, cadastros, agendamentos, pedidos e relatórios que substituem planilhas e processos manuais.',
     recebe: ['Login com níveis de acesso', 'Banco de dados e backups', 'Relatórios e exportação'],
-    msg: 'Olá, Code House! Preciso de um sistema web sob medida.',
+    assunto: 'Preciso de um sistema web sob medida.',
   },
   {
     id: 'aplicacoes',
@@ -36,7 +36,7 @@ const servicos = [
     descricao:
       'Front-end, back-end, integrações e infraestrutura para lançar uma plataforma, um SaaS ou um app web.',
     recebe: ['Arquitetura pronta para crescer', 'Pagamentos, e-mail e APIs', 'Deploy, monitoramento e suporte'],
-    msg: 'Olá, Code House! Quero tirar uma aplicação do papel.',
+    assunto: 'Quero tirar uma aplicação do papel.',
   },
 ];
 ---
@@ -167,7 +167,7 @@ const servicos = [
                   </li>
                 ))}
               </ul>
-              <a href={whatsappLink(s.msg)} target="_blank" rel="noopener" class="link-codigo mt-auto pt-8 text-sm">
+              <a href={whatsappLink(s.assunto)} target="_blank" rel="noopener" class="link-codigo mt-auto pt-8 text-sm">
                 Pedir orçamento de {s.nome.toLowerCase()}
               </a>
             </div>

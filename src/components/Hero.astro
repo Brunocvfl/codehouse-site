@@ -2,7 +2,7 @@
 import { getImage } from 'astro:assets';
 import casinha from '../assets/brand/casinha.png';
 import Icon from './Icon.astro';
-import { whatsappLink } from '../lib/site';
+import { whatsappLink } from '../lib/whatsapp';
 
 // A animação só amostra ~130px da imagem: uma versão WebP pequena basta.
 const casinhaLeve = await getImage({ src: casinha, width: 280, format: 'webp' });

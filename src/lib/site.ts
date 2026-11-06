@@ -10,15 +10,7 @@ export const SITE = {
   instagramUrl: 'https://www.instagram.com/code.housetech/',
 };
 
-// WhatsApp com DDI + DDD, só dígitos: +55 11 95374-4237
-export const WHATSAPP_NUMBER = '5511953744237';
-
-export const WHATSAPP_DEFAULT_MESSAGE =
-  'Olá, Code House! Vim pelo site e quero conversar sobre um projeto.';
-
-export function whatsappLink(message: string = WHATSAPP_DEFAULT_MESSAGE): string {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-}
+// O WhatsApp (número e mensagens) fica em ./whatsapp.ts.
 
 export const NAV = [
   { href: '/#servicos', label: 'Serviços' },

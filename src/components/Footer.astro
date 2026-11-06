@@ -1,6 +1,7 @@
 ---
 import Icon from './Icon.astro';
-import { NAV, SITE, whatsappLink } from '../lib/site';
+import { NAV, SITE } from '../lib/site';
+import { whatsappLink, whatsappExibicao } from '../lib/whatsapp';
 const year = new Date().getFullYear();
 
 // Cada letra do domínio recebe sua cor do degradê da marca (azul > roxo > coral).
@@ -31,7 +32,7 @@ const letras = [...SITE.domain].map((ch, i, arr) => ({ ch, cor: corEm(i / (arr.l
     <ul class="space-y-3 text-sm md:col-span-4">
       <li>
         <a href={whatsappLink()} target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-nevoa-2 hover:text-nevoa">
-          <Icon name="whatsapp" size={18} class="text-chaves" /> +55 11 95374-4237
+          <Icon name="whatsapp" size={18} class="text-chaves" /> {whatsappExibicao}
         </a>
       </li>
       <li>
