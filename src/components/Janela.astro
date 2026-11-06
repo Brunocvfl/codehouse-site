@@ -1,0 +1,36 @@
+---
+// Moldura de "janela" com barra de título e três bolinhas.
+// variante "terminal": a do formulário de contato. variante "arquivo": a do código em "Vem em todo projeto".
+interface Props {
+  titulo: string;
+  variante: 'terminal' | 'arquivo';
+  class?: string;
+}
+const { titulo, variante, class: classe } = Astro.props;
+---
+<div class:list={['janela', `janela-${variante}`, classe]}>
+  <div class="janela-topo">
+    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span>{titulo}</span>
+  </div>
+  <slot />
+</div>
+
+<style>
+  .janela { border: 1px solid var(--color-linha); border-radius: 14px; overflow: hidden; }
+  .janela-topo { display: flex; align-items: center; gap: 0.9rem; padding: 0.7rem 1rem; border-bottom: 1px solid var(--color-linha); font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-nevoa-2); }
+  .dots { display: inline-flex; gap: 6px; }
+  .dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--color-linha-forte); }
+
+  .janela-terminal {
+    border-color: var(--color-linha-forte);
+    background: color-mix(in srgb, var(--color-noite) 92%, transparent);
+    box-shadow: 0 40px 100px -40px color-mix(in srgb, var(--color-noite) 90%, transparent);
+  }
+
+  .janela-arquivo {
+    background: var(--color-noite-painel);
+    box-shadow: 0 40px 100px -40px color-mix(in srgb, var(--color-telhado) 55%, transparent);
+  }
+  .janela-arquivo .janela-topo { background: var(--color-noite); }
+</style>
