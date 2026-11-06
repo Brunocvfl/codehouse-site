@@ -18,6 +18,7 @@ npm test          # roda os testes
 | Número do WhatsApp e saudação das mensagens | `src/lib/whatsapp.ts` |
 | Instagram, domínio, menu | `src/lib/site.ts` |
 | Cores e fontes | `src/styles/global.css` (bloco `@theme`) |
+| Serviços oferecidos (nomes, descrições, o que o cliente recebe) | `src/lib/servicos.ts` |
 | Textos das seções | `src/components/*.astro` |
 | Texto da primeira tela | `src/components/Hero.astro` |
 | Animação da primeira tela (partículas que formam a casa) | `src/lib/particulas.ts` |

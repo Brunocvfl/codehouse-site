@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { TIPOS_DE_SERVICO } from './lib/servicos';
 
 // Cada projeto do portfólio é um arquivo .md em src/content/portfolio/.
 // O nome do arquivo vira o endereço: meu-projeto.md -> /portfolio/meu-projeto
@@ -10,7 +11,7 @@ const portfolio = defineCollection({
     z.object({
       title: z.string(),
       client: z.string(),
-      type: z.enum(['Site institucional', 'Landing page', 'Sistema web', 'Aplicação']),
+      type: z.enum(TIPOS_DE_SERVICO), // um dos tipos do Catálogo de Serviços
       summary: z.string().max(180),
       cover: image().optional(),
       url: z.string().url().optional(),
