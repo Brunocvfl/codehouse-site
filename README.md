@@ -19,7 +19,8 @@ npm test          # roda os testes
 | Instagram, domínio, menu | `src/lib/site.ts` |
 | Cores e fontes | `src/styles/global.css` (bloco `@theme`) |
 | Textos das seções | `src/components/*.astro` |
-| Animação da primeira tela (partículas que formam a casa) | `src/components/Hero.astro` |
+| Texto da primeira tela | `src/components/Hero.astro` |
+| Animação da primeira tela (partículas que formam a casa) | `src/lib/particulas.ts` |
 | Logo e ícones | `npm run icons` regenera a partir de `static/img/` |
 | Imagem de compartilhamento (WhatsApp/Instagram) | `public/og-image.png` (1200×630) |
 
