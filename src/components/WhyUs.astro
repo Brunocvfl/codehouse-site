@@ -49,7 +49,7 @@ const motivos = [
 </section>
 
 <style>
-  .arquivo { border: 1px solid var(--color-linha); border-radius: 14px; overflow: hidden; background: #08102c; box-shadow: 0 40px 100px -40px rgb(123 82 201 / 0.55); }
+  .arquivo { border: 1px solid var(--color-linha); border-radius: 14px; overflow: hidden; background: var(--color-noite-painel); box-shadow: 0 40px 100px -40px color-mix(in srgb, var(--color-telhado) 55%, transparent); }
   .arquivo-topo { display: flex; align-items: center; gap: 0.9rem; padding: 0.7rem 1rem; border-bottom: 1px solid var(--color-linha); background: var(--color-noite); font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-nevoa-2); }
   .dots { display: inline-flex; gap: 6px; }
   .dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--color-linha-forte); }
@@ -57,7 +57,7 @@ const motivos = [
   .l { display: block; padding-right: 1.25rem; white-space: pre; counter-increment: ln; }
   .l::before { content: counter(ln); display: inline-block; width: 3rem; padding-right: 1.25rem; text-align: right; color: #33407a; }
   .item { transition: background-color 0.15s; }
-  .item:hover { background: rgb(86 180 224 / 0.07); }
+  .item:hover { background: color-mix(in srgb, var(--color-codigo) 7%, transparent); }
   .k { color: var(--color-telhado-claro); }
   .f { color: var(--color-codigo); }
   .c { color: var(--color-codigo-claro); }

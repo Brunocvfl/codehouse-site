@@ -54,11 +54,11 @@ const sugestoes = [
 </section>
 
 <style>
-  .cta { background: radial-gradient(50rem 32rem at 75% 50%, rgb(123 82 201 / 0.28), transparent 70%), linear-gradient(120deg, #0d1f4a 0%, #0f1650 55%, #24175e 100%); }
+  .cta { background: radial-gradient(50rem 32rem at 75% 50%, color-mix(in srgb, var(--color-telhado) 28%, transparent), transparent 70%), linear-gradient(120deg, #0d1f4a 0%, #0f1650 55%, #24175e 100%); }
   .cta-fundo { position: absolute; inset: 0; mask-image: linear-gradient(90deg, transparent, #000 40%, #000 70%, transparent); opacity: 0.8; }
   .cta-titulo { font-size: clamp(2.6rem, 6.2vw, 5rem); font-weight: 400; letter-spacing: -0.01em; }
 
-  .terminal { border: 1px solid var(--color-linha-forte); border-radius: 14px; overflow: hidden; background: rgb(7 13 36 / 0.92); box-shadow: 0 40px 100px -40px rgb(7 13 36 / 0.9); }
+  .terminal { border: 1px solid var(--color-linha-forte); border-radius: 14px; overflow: hidden; background: color-mix(in srgb, var(--color-noite) 92%, transparent); box-shadow: 0 40px 100px -40px color-mix(in srgb, var(--color-noite) 90%, transparent); }
   .terminal-topo { display: flex; align-items: center; gap: 0.9rem; padding: 0.7rem 1rem; border-bottom: 1px solid var(--color-linha); font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-nevoa-2); }
   .dots { display: inline-flex; gap: 6px; }
   .dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--color-linha-forte); }
@@ -66,8 +66,8 @@ const sugestoes = [
   @media (min-width: 640px) { .terminal-corpo { padding: 2rem; } }
   .linha-sis { font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-nevoa-2); }
   .prompt { color: var(--color-codigo); }
-  .campo { display: flex; gap: 0.75rem; margin-top: 0.6rem; padding: 0.9rem 1rem; border: 1px solid var(--color-linha-forte); border-radius: 10px; background: #050a1d; transition: border-color 0.15s, box-shadow 0.15s; }
-  .campo:focus-within { border-color: var(--color-codigo); box-shadow: 0 0 0 4px rgb(86 180 224 / 0.15); }
+  .campo { display: flex; gap: 0.75rem; margin-top: 0.6rem; padding: 0.9rem 1rem; border: 1px solid var(--color-linha-forte); border-radius: 10px; background: var(--color-noite-funda); transition: border-color 0.15s, box-shadow 0.15s; }
+  .campo:focus-within { border-color: var(--color-codigo); box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-codigo) 15%, transparent); }
   .seta { font-family: var(--font-mono); color: var(--color-chaves); line-height: 1.6; }
   .campo textarea { flex: 1; resize: none; background: transparent; color: var(--color-nevoa); font-family: var(--font-mono); font-size: 0.95rem; line-height: 1.6; caret-color: var(--color-chaves); }
   .campo textarea:focus { outline: none; }
