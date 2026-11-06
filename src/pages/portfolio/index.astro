@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import CtaWhatsApp from '../../components/CtaWhatsApp.astro';
+import { getProjetos } from '../../lib/portfolio';
+import { SITE } from '../../lib/site';
+
+const projetos = await getProjetos();
+---
+<Base title="Portfólio" description="Projetos desenvolvidos pela Code House: sites, landing pages, sistemas web e aplicações.">
+  <section class="wrap pb-16 pt-32 md:pb-24 md:pt-40">
+    <h1 class="titulo-secao">Portfólio</h1>
+    <p class="mt-4 max-w-2xl text-lg text-nevoa-2">
+      Sites, landing pages, sistemas e aplicações que construímos com nossos clientes.
+    </p>
+
+    {projetos.length > 0 ? (
+      <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {projetos.map((p) => <ProjectCard projeto={p} />)}
+      </div>
+    ) : (
+      <p class="mt-12 max-w-xl rounded-xl border border-dashed border-linha p-8 text-nevoa-2">
+        Os estudos de caso estão sendo preparados. Veja os bastidores em
+        <a href={SITE.instagramUrl} target="_blank" rel="noopener" class="link-codigo">@{SITE.instagram}</a>.
+      </p>
+    )}
+  </section>
+  <CtaWhatsApp />
+</Base>

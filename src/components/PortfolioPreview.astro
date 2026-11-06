@@ -1,0 +1,39 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import Icon from './Icon.astro';
+import { getDestaques } from '../lib/portfolio';
+import { SITE } from '../lib/site';
+
+const destaques = await getDestaques(3);
+---
+<section id="portfolio" class="relative border-t border-linha py-24 md:py-32" aria-labelledby="portfolio-titulo">
+  <div class="wrap">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <h2 id="portfolio-titulo" class="titulo-secao">Projetos</h2>
+      {destaques.length > 0 && <a href="/portfolio" class="btn-linha">Ver todos os projetos</a>}
+    </div>
+
+    {destaques.length > 0 ? (
+      <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {destaques.map((p) => <ProjectCard projeto={p} />)}
+      </div>
+    ) : (
+      <div class="vazio malha mt-12">
+        <div class="relative max-w-xl">
+          <p class="font-display text-xl font-medium">Estudos de caso em produção.</p>
+          <p class="mt-3 text-nevoa-2">
+            Estamos documentando os projetos para publicar aqui. Enquanto isso, os bastidores estão no Instagram.
+          </p>
+          <a href={SITE.instagramUrl} target="_blank" rel="noopener" class="btn-linha mt-7">
+            <Icon name="instagram" size={18} /> Seguir @{SITE.instagram}
+          </a>
+        </div>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .vazio { position: relative; padding: 2.5rem; border: 1px dashed var(--color-linha-forte); border-radius: 16px; background-color: var(--color-noite-2); }
+  @media (min-width: 768px) { .vazio { padding: 3.5rem; } }
+</style>

@@ -1,0 +1,51 @@
+---
+import { render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import CtaWhatsApp from '../../components/CtaWhatsApp.astro';
+import { getProjetos } from '../../lib/portfolio';
+
+export async function getStaticPaths() {
+  const projetos = await getProjetos();
+  return projetos.map((projeto) => ({ params: { slug: projeto.id }, props: { projeto } }));
+}
+
+const { projeto } = Astro.props;
+const d = projeto.data;
+const { Content } = await render(projeto);
+---
+<Base title={d.title} description={d.summary}>
+  <article class="wrap pb-16 pt-32 md:pb-24 md:pt-40">
+    <a href="/portfolio" class="link-codigo text-sm">Voltar ao portfólio</a>
+    <p class="mt-8 text-nevoa-2">{d.type} para {d.client}, {d.year}</p>
+    <h1 class="mt-2 max-w-3xl text-3xl font-semibold md:text-4xl" >{d.title}</h1>
+    <p class="mt-5 max-w-2xl text-lg text-nevoa-2">{d.summary}</p>
+
+    <div class="mt-6 flex flex-wrap items-center gap-3">
+      {d.stack.map((s) => (
+        <span class="rounded-md border border-linha px-2.5 py-1 text-sm text-nevoa-2">{s}</span>
+      ))}
+      {d.url && (
+        <a href={d.url} target="_blank" rel="noopener" class="btn-linha ml-auto">Ver projeto no ar</a>
+      )}
+    </div>
+
+    {d.cover && (
+      <Image src={d.cover} alt={`Tela do projeto ${d.title}`} widths={[800, 1400]} sizes="(min-width: 1200px) 1200px, 100vw" class="mt-12 w-full rounded-xl border border-linha" />
+    )}
+
+    <div class="prosa mt-12 max-w-2xl">
+      <Content />
+    </div>
+  </article>
+  <CtaWhatsApp />
+</Base>
+
+<style>
+  .prosa :global(h2) { font-size: var(--text-xl); font-weight: 600; margin: 2.2rem 0 0.8rem; }
+  .prosa :global(h3) { font-size: var(--text-lg); font-weight: 600; margin: 1.8rem 0 0.6rem; }
+  .prosa :global(p) { color: var(--color-nevoa-2); margin: 0 0 1.1rem; }
+  .prosa :global(ul) { list-style: disc; padding-left: 1.3rem; color: var(--color-nevoa-2); margin-bottom: 1.1rem; }
+  .prosa :global(a) { color: var(--color-codigo); text-decoration: underline; }
+  .prosa :global(img) { border-radius: 0.75rem; margin: 1.5rem 0; }
+</style>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://codehouse.tec.br/sitemap-index.xml

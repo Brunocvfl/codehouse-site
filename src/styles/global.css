@@ -1,0 +1,132 @@
+@import 'tailwindcss';
+@import '@fontsource/russo-one/400.css';
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource-variable/jetbrains-mono/wght.css';
+
+@theme {
+  /* Cores da marca */
+  --color-noite: #070d24;
+  --color-noite-2: #0b1433;
+  --color-noite-3: #101b44;
+  --color-indigo: #1c1a5e;
+  --color-telhado: #7b52c9;
+  --color-telhado-claro: #b39af0;
+  --color-codigo: #56b4e0;
+  --color-codigo-claro: #9bd6f2;
+  --color-chaves: #e0745a;
+  --color-chaves-forte: #ef8d74;
+  --color-nevoa: #eef1fa;
+  --color-nevoa-2: #a9b3d6;
+  --color-linha: #1e2a5c;
+  --color-linha-forte: #2c3b7a;
+
+  --font-display: 'Russo One', system-ui, sans-serif;
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Code', monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    background: var(--color-noite);
+    color-scheme: dark;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  body {
+    background: var(--color-noite);
+    color: var(--color-nevoa);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    line-height: 1.05;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-synthesis: none;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--color-telhado); color: #fff; }
+  :focus-visible {
+    outline: 2px solid var(--color-codigo);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) { .wrap { padding-inline: 2rem; } }
+
+  /* Malha de blueprint: fundo técnico das seções */
+  .malha {
+    background-image:
+      linear-gradient(rgb(86 180 224 / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(86 180 224 / 0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .titulo-secao {
+    font-size: clamp(2rem, 4.6vw, 3.6rem);
+    font-weight: 400;
+  }
+
+  .btn-acao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.95rem 1.5rem;
+    border-radius: 0.5rem;
+    background: var(--color-chaves);
+    color: #1a0c08;
+    font-weight: 600;
+    line-height: 1.2;
+    transition: background-color 0.15s ease, box-shadow 0.2s ease;
+  }
+  .btn-acao:hover {
+    background: var(--color-chaves-forte);
+    box-shadow: 0 0 0 4px rgb(224 116 90 / 0.18), 0 10px 30px -10px rgb(224 116 90 / 0.6);
+  }
+
+  .btn-linha {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1.4rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-linha-forte);
+    color: var(--color-nevoa);
+    font-weight: 500;
+    line-height: 1.2;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+  .btn-linha:hover { border-color: var(--color-codigo); background: rgb(86 180 224 / 0.08); }
+
+  .link-codigo {
+    color: var(--color-codigo);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+  }
+  .link-codigo:hover { color: var(--color-codigo-claro); }
+}
+
+/* A Russo One só tem um peso: nunca simular negrito nos títulos */
+@layer base {
+  .font-display, h1, h2, h3, dt { font-synthesis: none; }
+}

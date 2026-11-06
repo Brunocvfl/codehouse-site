@@ -1,0 +1,112 @@
+---
+import Icon from './Icon.astro';
+import { SITE, WHATSAPP_NUMBER } from '../lib/site';
+
+const sugestoes = [
+  'Quero um site para minha empresa',
+  'Preciso de uma landing page',
+  'Quero um sistema para organizar meu negócio',
+  'Tenho uma ideia de plataforma web',
+];
+---
+<section id="contato" class="cta relative overflow-hidden border-t border-linha py-24 md:py-32" aria-labelledby="contato-titulo">
+  <div class="cta-fundo malha" aria-hidden="true"></div>
+  <div class="wrap relative grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center">
+    <div class="lg:col-span-5">
+      <h2 id="contato-titulo" class="cta-titulo">Conte sua ideia.</h2>
+      <p class="mt-5 max-w-md text-lg text-nevoa-2">
+        Escreva em uma frase o que você precisa. A mensagem vai direto para o nosso WhatsApp e a gente responde com perguntas sobre o seu negócio.
+      </p>
+      <p class="mt-6 text-sm text-nevoa-2">
+        Prefere acompanhar antes? <a href={SITE.instagramUrl} target="_blank" rel="noopener" class="link-codigo">@{SITE.instagram}</a>
+      </p>
+    </div>
+
+    <form class="terminal lg:col-span-7" data-terminal data-numero={WHATSAPP_NUMBER} novalidate>
+      <div class="terminal-topo">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>nova-ideia</span>
+      </div>
+      <div class="terminal-corpo">
+        <p class="linha-sis" aria-hidden="true"><span class="prompt">codehouse ~ $</span> nova-ideia --enviar whatsapp</p>
+        <label for="ideia" class="linha-sis mt-3 block text-nevoa">Descreva sua ideia:</label>
+        <div class="campo">
+          <span class="seta" aria-hidden="true">&gt;</span>
+          <textarea id="ideia" name="ideia" rows="3" maxlength="600" placeholder="Ex.: quero um site para minha clínica com agendamento online" aria-describedby="ideia-erro"></textarea>
+        </div>
+        <p id="ideia-erro" class="erro" data-erro aria-live="polite"></p>
+
+        <div class="mt-5 flex flex-wrap gap-2" aria-label="Sugestões">
+          {sugestoes.map((s) => (
+            <button type="button" class="sugestao" data-sugestao={s}>{s}</button>
+          ))}
+        </div>
+
+        <div class="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-linha pt-5">
+          <span class="text-sm text-nevoa-2">Abre o WhatsApp com a sua mensagem pronta.</span>
+          <button type="submit" class="btn-acao">
+            <Icon name="whatsapp" size={20} /> Enviar pelo WhatsApp
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+  .cta { background: radial-gradient(50rem 32rem at 75% 50%, rgb(123 82 201 / 0.28), transparent 70%), linear-gradient(120deg, #0d1f4a 0%, #0f1650 55%, #24175e 100%); }
+  .cta-fundo { position: absolute; inset: 0; mask-image: linear-gradient(90deg, transparent, #000 40%, #000 70%, transparent); opacity: 0.8; }
+  .cta-titulo { font-size: clamp(2.6rem, 6.2vw, 5rem); font-weight: 400; letter-spacing: -0.01em; }
+
+  .terminal { border: 1px solid var(--color-linha-forte); border-radius: 14px; overflow: hidden; background: rgb(7 13 36 / 0.92); box-shadow: 0 40px 100px -40px rgb(7 13 36 / 0.9); }
+  .terminal-topo { display: flex; align-items: center; gap: 0.9rem; padding: 0.7rem 1rem; border-bottom: 1px solid var(--color-linha); font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-nevoa-2); }
+  .dots { display: inline-flex; gap: 6px; }
+  .dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--color-linha-forte); }
+  .terminal-corpo { padding: 1.5rem; }
+  @media (min-width: 640px) { .terminal-corpo { padding: 2rem; } }
+  .linha-sis { font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-nevoa-2); }
+  .prompt { color: var(--color-codigo); }
+  .campo { display: flex; gap: 0.75rem; margin-top: 0.6rem; padding: 0.9rem 1rem; border: 1px solid var(--color-linha-forte); border-radius: 10px; background: #050a1d; transition: border-color 0.15s, box-shadow 0.15s; }
+  .campo:focus-within { border-color: var(--color-codigo); box-shadow: 0 0 0 4px rgb(86 180 224 / 0.15); }
+  .seta { font-family: var(--font-mono); color: var(--color-chaves); line-height: 1.6; }
+  .campo textarea { flex: 1; resize: none; background: transparent; color: var(--color-nevoa); font-family: var(--font-mono); font-size: 0.95rem; line-height: 1.6; caret-color: var(--color-chaves); }
+  .campo textarea:focus { outline: none; }
+  .campo textarea::placeholder { color: #4d5a8e; }
+  .erro { min-height: 1.3rem; margin-top: 0.5rem; font-size: 0.875rem; color: var(--color-chaves-forte); }
+  .sugestao { padding: 0.4rem 0.8rem; border: 1px solid var(--color-linha-forte); border-radius: 999px; font-size: 0.85rem; color: var(--color-nevoa-2); transition: border-color 0.15s, color 0.15s; cursor: pointer; }
+  .sugestao:hover { border-color: var(--color-codigo); color: var(--color-nevoa); }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-terminal]').forEach((form) => {
+    const campo = form.querySelector<HTMLTextAreaElement>('textarea')!;
+    const erro = form.querySelector<HTMLElement>('[data-erro]')!;
+    const numero = form.dataset.numero;
+
+    form.querySelectorAll<HTMLButtonElement>('[data-sugestao]').forEach((b) =>
+      b.addEventListener('click', () => {
+        campo.value = b.dataset.sugestao + ': ';
+        campo.focus();
+        campo.setSelectionRange(campo.value.length, campo.value.length);
+        erro.textContent = '';
+      }),
+    );
+
+    campo.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); }
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const ideia = campo.value.trim();
+      if (ideia.length < 5) {
+        erro.textContent = 'Escreva sua ideia em pelo menos uma frase curta para enviarmos.';
+        campo.focus();
+        return;
+      }
+      erro.textContent = '';
+      const msg = `Olá, Code House! Vim pelo site. Minha ideia: ${ideia}`;
+      window.open(`https://wa.me/${numero}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+    });
+  });
+</script>

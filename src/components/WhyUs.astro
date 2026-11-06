@@ -1,0 +1,68 @@
+---
+// "Incluso em todo projeto", escrito como a configuração de um projeto.
+const config: { chave: string; valor: string; tipo: 'b' | 's'; nota: string }[] = [
+  { chave: 'responsivo', valor: 'true', tipo: 'b', nota: 'celular, tablet e computador' },
+  { chave: 'https', valor: 'true', tipo: 'b', nota: 'certificado de segurança' },
+  { chave: 'dominio', valor: "'seunegocio.com.br'", tipo: 's', nota: 'configurado por nós' },
+  { chave: 'seo', valor: "'on-page'", tipo: 's', nota: 'pronto para o Google' },
+  { chave: 'imagens', valor: "'otimizadas'", tipo: 's', nota: 'carregam rápido' },
+  { chave: 'analytics', valor: 'true', tipo: 'b', nota: 'você vê quem visita' },
+  { chave: 'whatsapp', valor: "'integrado'", tipo: 's', nota: 'contato em um toque' },
+];
+
+const motivos = [
+  { titulo: 'Rápido de verdade', texto: 'Páginas leves e hospedagem em CDN. Quem chega pelo celular não desiste esperando carregar.' },
+  { titulo: 'Design que funciona', texto: 'Cada tela é pensada para o visitante entender a oferta e agir.' },
+  { titulo: 'Tecnologia atual', texto: 'Ferramentas modernas e consolidadas, com código organizado para crescer sem recomeçar.' },
+  { titulo: 'Fala direto com quem faz', texto: 'Sem intermediários, do primeiro contato ao suporte.' },
+];
+---
+<section class="relative border-t border-linha py-24 md:py-32" aria-labelledby="incluso-titulo">
+  <div class="wrap grid grid-cols-1 gap-14 lg:grid-cols-12">
+    <div class="lg:col-span-5">
+      <h2 id="incluso-titulo" class="titulo-secao">Vem em todo projeto</h2>
+      <dl class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-1">
+        {motivos.map((m) => (
+          <div class="border-l-2 border-linha-forte pl-4">
+            <dt class="font-display text-base font-medium">{m.titulo}</dt>
+            <dd class="mt-1.5 text-nevoa-2">{m.texto}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+
+    <figure class="min-w-0 lg:col-span-7">
+      <div class="arquivo">
+        <div class="arquivo-topo">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>codehouse.config.ts</span>
+        </div>
+        <pre class="arquivo-codigo"><code><span class="l"><span class="k">export default</span> <span class="f">defineProjeto</span><span class="p">({'({'}</span></span>{config.map((c) => (
+<span class="l item">  <span class="c">{c.chave}</span><span class="p">: </span><span class={c.tipo === 'b' ? 'b' : 's'}>{c.valor}</span><span class="p">,</span><span class="n"> // {c.nota}</span></span>
+))}<span class="l"><span class="p">{'})'}</span></span></code></pre>
+      </div>
+      <figcaption class="mt-4 text-sm text-nevoa-2">
+        Em linguagem de gente: tudo isso já está incluso no orçamento, sem taxa escondida.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .arquivo { border: 1px solid var(--color-linha); border-radius: 14px; overflow: hidden; background: #08102c; box-shadow: 0 40px 100px -40px rgb(123 82 201 / 0.55); }
+  .arquivo-topo { display: flex; align-items: center; gap: 0.9rem; padding: 0.7rem 1rem; border-bottom: 1px solid var(--color-linha); background: var(--color-noite); font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-nevoa-2); }
+  .dots { display: inline-flex; gap: 6px; }
+  .dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--color-linha-forte); }
+  .arquivo-codigo { margin: 0; padding: 1.25rem 0; font-family: var(--font-mono); font-size: clamp(0.78rem, 1.4vw, 0.95rem); line-height: 1.95; overflow-x: auto; counter-reset: ln; }
+  .l { display: block; padding-right: 1.25rem; white-space: pre; counter-increment: ln; }
+  .l::before { content: counter(ln); display: inline-block; width: 3rem; padding-right: 1.25rem; text-align: right; color: #33407a; }
+  .item { transition: background-color 0.15s; }
+  .item:hover { background: rgb(86 180 224 / 0.07); }
+  .k { color: var(--color-telhado-claro); }
+  .f { color: var(--color-codigo); }
+  .c { color: var(--color-codigo-claro); }
+  .p { color: #7884b3; }
+  .b { color: var(--color-chaves-forte); }
+  .s { color: #f2c9b9; }
+  .n { color: #8b96c6; font-style: italic; }
+</style>

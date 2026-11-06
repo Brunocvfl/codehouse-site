@@ -1,0 +1,89 @@
+---
+import Icon from './Icon.astro';
+import { NAV, SITE, whatsappLink } from '../lib/site';
+const year = new Date().getFullYear();
+
+// Cada letra do domínio recebe sua cor do degradê da marca (azul > roxo > coral).
+const paradas = [[0x56, 0xb4, 0xe0], [0x7b, 0x52, 0xc9], [0xe0, 0x74, 0x5a]];
+const corEm = (t: number) => {
+  const s = t < 0.6 ? 0 : 1;
+  const local = s === 0 ? t / 0.6 : (t - 0.6) / 0.4;
+  const [a, b] = [paradas[s], paradas[s + 1]];
+  return `rgb(${a.map((v, k) => Math.round(v + (b[k] - v) * local)).join(',')})`;
+};
+const letras = [...SITE.domain].map((ch, i, arr) => ({ ch, cor: corEm(i / (arr.length - 1)) }));
+---
+<footer class="relative overflow-hidden border-t border-linha bg-noite">
+  <div class="wrap grid gap-10 pb-10 pt-16 md:grid-cols-12">
+    <p class="max-w-sm text-nevoa-2 md:col-span-5">
+      Code House. Sites, landing pages, sistemas web e aplicações para tirar ideias do papel.
+    </p>
+
+    <nav aria-label="Rodapé" class="md:col-span-3">
+      <ul class="space-y-2 text-sm text-nevoa-2">
+        {NAV.map((item) => (
+          <li><a href={item.href} class="hover:text-nevoa">{item.label}</a></li>
+        ))}
+        <li><a href="/portfolio" class="hover:text-nevoa">Todos os projetos</a></li>
+      </ul>
+    </nav>
+
+    <ul class="space-y-3 text-sm md:col-span-4">
+      <li>
+        <a href={whatsappLink()} target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-nevoa-2 hover:text-nevoa">
+          <Icon name="whatsapp" size={18} class="text-chaves" /> +55 11 95374-4237
+        </a>
+      </li>
+      <li>
+        <a href={SITE.instagramUrl} target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-nevoa-2 hover:text-nevoa">
+          <Icon name="instagram" size={18} class="text-codigo" /> @{SITE.instagram}
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="wrap pb-1 pt-10 text-center md:pt-14" aria-hidden="true">
+    <p class="marca">{letras.map((l, i) => (
+      <span class="letra" style={`--i:${i};--cor:${l.cor}`}>{l.ch}</span>
+    ))}</p>
+  </div>
+
+  <div class="border-t border-linha">
+    <p class="wrap py-5 text-sm text-nevoa-2">© {year} Code House. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<style>
+  .marca {
+    font-family: var(--font-display);
+    font-weight: 400;
+    display: inline-block;
+    font-size: min(calc((100vw - 4.5rem) / 13), 3.25rem);
+    line-height: 1;
+    letter-spacing: 0;
+    white-space: nowrap;
+    user-select: none;
+    cursor: default;
+  }
+  .letra {
+    display: inline-block;
+    color: var(--cor);
+    opacity: 0.88;
+    transition: opacity 0.3s ease, text-shadow 0.3s ease;
+  }
+  /* Ao passar o mouse: as letras sobem em onda e acendem, como um sinal passando pelo nome */
+  .marca:hover .letra {
+    opacity: 1;
+    text-shadow: 0 0 18px var(--cor);
+    animation: onda 0.9s cubic-bezier(.3,.7,.4,1) calc(var(--i) * 45ms) both;
+  }
+  @keyframes onda {
+    0%   { transform: translateY(0); }
+    35%  { transform: translateY(-0.28em); filter: brightness(1.5); }
+    70%  { transform: translateY(0.04em); }
+    100% { transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marca:hover .letra { animation: none; }
+  }
+</style>

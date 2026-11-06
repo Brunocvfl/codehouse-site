@@ -1,0 +1,26 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  projeto: CollectionEntry<'portfolio'>;
+}
+const { projeto } = Astro.props;
+const d = projeto.data;
+---
+<article class="group relative flex flex-col overflow-hidden rounded-xl border border-linha bg-noite-2 transition-colors hover:border-codigo/60">
+  <div class="aspect-[16/10] overflow-hidden bg-indigo">
+    {d.cover ? (
+      <Image src={d.cover} alt="" widths={[480, 800]} sizes="(min-width: 1024px) 380px, 100vw" class="size-full object-cover" />
+    ) : (
+      <div class="grid size-full place-items-center font-mono text-3xl text-codigo/60" aria-hidden="true">{'</>'}</div>
+    )}
+  </div>
+  <div class="flex flex-1 flex-col p-5">
+    <p class="text-sm text-nevoa-2">{d.type} para {d.client}</p>
+    <h3 class="mt-1 text-lg font-semibold">
+      <a href={`/portfolio/${projeto.id}`} class="after:absolute after:inset-0">{d.title}</a>
+    </h3>
+    <p class="mt-2 text-sm text-nevoa-2">{d.summary}</p>
+  </div>
+</article>

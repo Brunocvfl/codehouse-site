@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/logo.png';
+import Icon from './Icon.astro';
+import { NAV, whatsappLink } from '../lib/site';
+---
+<header class="topo fixed inset-x-0 top-0 z-40" data-topo>
+  <a href="#conteudo" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded focus:bg-nevoa focus:px-3 focus:py-2 focus:text-noite">
+    Pular para o conteúdo
+  </a>
+  <div class="wrap flex h-[4.25rem] items-center justify-between gap-4">
+    <a href="/" aria-label="Code House, página inicial" class="shrink-0">
+      <Image src={logo} alt="" width={112} densities={[1, 2]} loading="eager" class="h-auto w-[96px] sm:w-[112px]" />
+    </a>
+
+    <nav aria-label="Principal" class="hidden md:block">
+      <ul class="flex items-center gap-1 rounded-full border border-linha bg-noite-2/70 p-1 text-sm text-nevoa-2 backdrop-blur-md">
+        {NAV.map((item) => (
+          <li><a href={item.href} class="block rounded-full px-4 py-1.5 transition-colors hover:bg-noite-3 hover:text-nevoa">{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <a href={whatsappLink()} target="_blank" rel="noopener" class="btn-acao !px-4 !py-2.5 text-sm">
+      <Icon name="whatsapp" size={18} />
+      <span class="hidden sm:inline">Pedir orçamento</span>
+      <span class="sm:hidden">WhatsApp</span>
+    </a>
+  </div>
+</header>
+
+<style>
+  .topo { transition: background-color 0.25s ease, border-color 0.25s ease; border-bottom: 1px solid transparent; }
+  .topo.rolou { background: rgb(7 13 36 / 0.82); border-color: var(--color-linha); backdrop-filter: blur(12px); }
+</style>
+
+<script>
+  const topo = document.querySelector('[data-topo]');
+  const atualiza = () => topo?.classList.toggle('rolou', window.scrollY > 24);
+  atualiza();
+  window.addEventListener('scroll', atualiza, { passive: true });
+</script>

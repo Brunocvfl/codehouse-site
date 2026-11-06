@@ -1,0 +1,13 @@
+---
+import Icon from './Icon.astro';
+import { whatsappLink } from '../lib/site';
+---
+<a
+  href={whatsappLink()}
+  target="_blank"
+  rel="noopener"
+  aria-label="Conversar com a Code House no WhatsApp"
+  class="fixed bottom-5 right-5 z-40 grid size-14 place-items-center rounded-full bg-chaves text-[#1a0c08] shadow-[0_8px_24px_-6px_rgba(224,116,90,0.55)] transition-colors hover:bg-chaves-forte"
+>
+  <Icon name="whatsapp" size={28} />
+</a>

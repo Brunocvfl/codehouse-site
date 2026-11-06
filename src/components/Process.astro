@@ -1,0 +1,98 @@
+---
+const etapas = [
+  { nome: 'Conversa', texto: 'Entendemos o negócio, o público e o objetivo. Você recebe uma proposta com escopo, prazo e valor fechados.' },
+  { nome: 'Protótipo', texto: 'Você vê e aprova as telas antes de qualquer linha de código. Ajustes aqui custam pouco.' },
+  { nome: 'Desenvolvimento', texto: 'Construímos em etapas, com um link de teste para você acompanhar a evolução e dar retorno.' },
+  { nome: 'Lançamento e suporte', texto: 'Publicamos, configuramos domínio e métricas, e seguimos por perto para ajustes e novas fases.' },
+];
+---
+<section id="processo" class="relative border-t border-linha bg-noite-2 py-24 md:py-32" aria-labelledby="processo-titulo">
+  <div class="wrap">
+    <div class="grid gap-6 lg:grid-cols-12 lg:items-end">
+      <h2 id="processo-titulo" class="titulo-secao lg:col-span-7">Da ideia ao deploy</h2>
+      <p class="text-lg text-nevoa-2 lg:col-span-5">
+        Um pipeline curto e transparente. Você sabe em que etapa o projeto está, do primeiro papo até o site no ar.
+      </p>
+    </div>
+
+    <div role="list" class="pipeline mt-16" data-pipeline style="--prog:0">
+      <div class="trilho" aria-hidden="true"><div class="trilho-fill"></div></div>
+      {etapas.map((e, i) => (
+        <div role="listitem" class="etapa" data-etapa={i}>
+          <span class="no" aria-hidden="true">
+            <span class="no-num">{String(i + 1).padStart(2, '0')}</span>
+            <svg class="no-ok" width="18" height="18" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </span>
+          <div class="etapa-corpo">
+            <h3 class="text-xl font-semibold">{e.nome}</h3>
+            <p class="mt-2 text-nevoa-2">{e.texto}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .pipeline { position: relative; display: grid; gap: 2.75rem; padding-left: 3.5rem; }
+  .trilho { position: absolute; left: 1.35rem; top: 0.5rem; bottom: 0.5rem; width: 2px; background: var(--color-linha-forte); }
+  .trilho-fill { position: absolute; inset: 0; background: linear-gradient(180deg, var(--color-codigo), var(--color-telhado)); transform-origin: top; transform: scaleY(var(--prog)); }
+
+  .etapa { position: relative; }
+  .no {
+    position: absolute;
+    left: -3.5rem;
+    top: -0.25rem;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--color-linha-forte);
+    background: var(--color-noite-2);
+    color: var(--color-nevoa-2);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s, box-shadow 0.3s;
+  }
+  .no > * { grid-area: 1 / 1; transition: opacity 0.25s; }
+  .no-ok { opacity: 0; }
+  .etapa.feita .no { border-color: var(--color-codigo); background: var(--color-codigo); color: var(--color-noite); box-shadow: 0 0 0 6px rgb(86 180 224 / 0.14); }
+  .etapa.feita .no-num { opacity: 0; }
+  .etapa.feita .no-ok { opacity: 1; }
+
+  @media (min-width: 1024px) {
+    .pipeline { grid-template-columns: repeat(4, 1fr); gap: 2rem; padding-left: 0; padding-top: 4.5rem; }
+    .trilho { left: 1.375rem; right: calc(25% - 1.375rem); top: 1.375rem; bottom: auto; width: auto; height: 2px; }
+    .trilho-fill { transform-origin: left; transform: scaleX(var(--prog)); }
+    .no { left: 0; top: -4.5rem; }
+    .etapa-corpo { padding-right: 1rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .no, .no > * { transition: none; }
+  }
+</style>
+
+<script>
+  const pipe = document.querySelector<HTMLElement>('[data-pipeline]');
+  if (pipe) {
+    const etapas = [...pipe.querySelectorAll<HTMLElement>('[data-etapa]')];
+    const n = etapas.length;
+    let pedido = false;
+    const atualizar = () => {
+      pedido = false;
+      const r = pipe.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // 0 quando o topo do pipeline está a 80% da tela; 1 quando o fim passa de 55%
+      const ini = vh * 0.8, fim = vh * 0.55;
+      const total = r.height + (ini - fim);
+      const prog = Math.min(1, Math.max(0, (ini - r.top) / total));
+      pipe.style.setProperty('--prog', prog.toFixed(3));
+      etapas.forEach((e, i) => e.classList.toggle('feita', prog >= i / (n - 1) - 0.001 && prog > 0.02));
+    };
+    const pedir = () => { if (!pedido) { pedido = true; requestAnimationFrame(atualizar); } };
+    window.addEventListener('scroll', pedir, { passive: true });
+    window.addEventListener('resize', pedir);
+    atualizar();
+  }
+</script>
