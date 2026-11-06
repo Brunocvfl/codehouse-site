@@ -1,9 +1,9 @@
 ---
 import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
+import type { Projeto } from '../lib/portfolio';
 
 interface Props {
-  projeto: CollectionEntry<'portfolio'>;
+  projeto: Projeto;
 }
 const { projeto } = Astro.props;
 const d = projeto.data;
@@ -17,9 +17,9 @@ const d = projeto.data;
     )}
   </div>
   <div class="flex flex-1 flex-col p-5">
-    <p class="text-sm text-nevoa-2">{d.type} para {d.client}</p>
+    <p class="text-sm text-nevoa-2">{projeto.rotulo}</p>
     <h3 class="mt-1 text-lg font-semibold">
-      <a href={`/portfolio/${projeto.id}`} class="after:absolute after:inset-0">{d.title}</a>
+      <a href={projeto.href} class="after:absolute after:inset-0">{d.title}</a>
     </h3>
     <p class="mt-2 text-sm text-nevoa-2">{d.summary}</p>
   </div>

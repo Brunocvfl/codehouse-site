@@ -3,21 +3,20 @@ import { render } from 'astro:content';
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import CtaWhatsApp from '../../components/CtaWhatsApp.astro';
-import { getProjetos } from '../../lib/portfolio';
+import { getCaminhos, type Projeto } from '../../lib/portfolio';
 
 export async function getStaticPaths() {
-  const projetos = await getProjetos();
-  return projetos.map((projeto) => ({ params: { slug: projeto.id }, props: { projeto } }));
+  return getCaminhos();
 }
 
-const { projeto } = Astro.props;
+const { projeto } = Astro.props as { projeto: Projeto };
 const d = projeto.data;
 const { Content } = await render(projeto);
 ---
 <Base title={d.title} description={d.summary}>
   <article class="wrap pb-16 pt-32 md:pb-24 md:pt-40">
     <a href="/portfolio" class="link-codigo text-sm">Voltar ao portfólio</a>
-    <p class="mt-8 text-nevoa-2">{d.type} para {d.client}, {d.year}</p>
+    <p class="mt-8 text-nevoa-2">{projeto.rotulo}, {d.year}</p>
     <h1 class="mt-2 max-w-3xl text-3xl font-semibold md:text-4xl" >{d.title}</h1>
     <p class="mt-5 max-w-2xl text-lg text-nevoa-2">{d.summary}</p>
 

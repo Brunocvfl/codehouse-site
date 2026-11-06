@@ -15,3 +15,21 @@ _Avoid_: mensagem padrão, prefixo
 **Assunto**:
 O que o visitante quer tratar, escrito depois da Saudação; vem do serviço escolhido, da ideia digitada ou do padrão.
 _Avoid_: msg, texto
+
+## Portfólio
+
+**Projeto**:
+Um trabalho entregue a um cliente, publicado como estudo de caso com página própria.
+_Avoid_: case, trabalho, item
+
+**Rascunho**:
+Projeto ainda não publicado; não aparece em nenhuma página do site.
+_Avoid_: oculto, privado
+
+**Destaque**:
+Projeto escolhido para aparecer também na página inicial.
+_Avoid_: featured, favorito
+
+**Rótulo**:
+A linha que situa o Projeto: o tipo de entrega e para qual cliente.
+_Avoid_: subtítulo, categoria
