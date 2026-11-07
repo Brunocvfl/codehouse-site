@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { whatsappExibicao, whatsappLink } from './whatsapp';
+import { ERRO_IDEIA_CURTA, SUGESTOES, assuntoDaIdeia, whatsappExibicao, whatsappLink } from './whatsapp';
+import { SERVICOS } from './servicos';
 
 const mensagem = (link: string) => new URL(link).searchParams.get('text');
 
@@ -34,5 +35,35 @@ describe('whatsappLink', () => {
 describe('whatsappExibicao', () => {
   it('mostra o número formatado', () => {
     expect(whatsappExibicao).toBe('+55 11 95374-4237');
+  });
+});
+
+describe('assuntoDaIdeia', () => {
+  it('texto livre vira "Minha ideia: …"', () => {
+    expect(assuntoDaIdeia('  site para minha clínica  ')).toEqual({ ok: true, assunto: 'Minha ideia: site para minha clínica' });
+  });
+
+  it('começando por uma sugestão, vai sem o "Minha ideia:"', () => {
+    expect(assuntoDaIdeia('Preciso de uma landing page: clínica com agendamento')).toEqual({
+      ok: true,
+      assunto: 'Preciso de uma landing page: clínica com agendamento',
+    });
+  });
+
+  it('sugestão sem nada depois: envia a sugestão, sem os dois-pontos', () => {
+    expect(assuntoDaIdeia('Preciso de uma landing page: ')).toEqual({ ok: true, assunto: 'Preciso de uma landing page' });
+  });
+
+  it('menos de 5 caracteres (ou só dois-pontos) não passa', () => {
+    expect(assuntoDaIdeia('oi')).toEqual({ ok: false, erro: ERRO_IDEIA_CURTA });
+    expect(assuntoDaIdeia('   ')).toEqual({ ok: false, erro: ERRO_IDEIA_CURTA });
+    expect(assuntoDaIdeia('abc :')).toEqual({ ok: false, erro: ERRO_IDEIA_CURTA });
+    expect(assuntoDaIdeia('loja!').ok).toBe(true);
+  });
+});
+
+describe('SUGESTOES', () => {
+  it('uma por Serviço, na ordem do Catálogo', () => {
+    expect(SUGESTOES).toEqual(SERVICOS.map((s) => s.sugestao));
   });
 });

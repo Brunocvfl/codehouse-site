@@ -2,13 +2,7 @@
 import Icon from './Icon.astro';
 import Janela from './Janela.astro';
 import { SITE } from '../lib/site';
-
-const sugestoes = [
-  'Quero um site para minha empresa',
-  'Preciso de uma landing page',
-  'Quero um sistema para organizar meu negócio',
-  'Tenho uma ideia de plataforma web',
-];
+import { SUGESTOES } from '../lib/whatsapp';
 ---
 <section id="contato" class="cta relative overflow-hidden border-t border-linha py-24 md:py-32" aria-labelledby="contato-titulo">
   <div class="cta-fundo malha" aria-hidden="true"></div>
@@ -34,7 +28,7 @@ const sugestoes = [
         <p id="ideia-erro" class="erro" data-erro aria-live="polite"></p>
 
         <div class="mt-5 flex flex-wrap gap-2" aria-label="Sugestões">
-          {sugestoes.map((s) => (
+          {SUGESTOES.map((s) => (
             <button type="button" class="sugestao" data-sugestao={s}>{s}</button>
           ))}
         </div>
@@ -71,7 +65,7 @@ const sugestoes = [
 </style>
 
 <script>
-  import { whatsappLink } from '../lib/whatsapp';
+  import { assuntoDaIdeia, whatsappLink } from '../lib/whatsapp';
 
   document.querySelectorAll<HTMLFormElement>('[data-terminal]').forEach((form) => {
     const campo = form.querySelector<HTMLTextAreaElement>('textarea')!;
@@ -92,14 +86,14 @@ const sugestoes = [
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const ideia = campo.value.trim();
-      if (ideia.length < 5) {
-        erro.textContent = 'Escreva sua ideia em pelo menos uma frase curta para enviarmos.';
+      const resultado = assuntoDaIdeia(campo.value);
+      if (!resultado.ok) {
+        erro.textContent = resultado.erro;
         campo.focus();
         return;
       }
       erro.textContent = '';
-      window.open(whatsappLink(`Minha ideia: ${ideia}`), '_blank', 'noopener');
+      window.open(whatsappLink(resultado.assunto), '_blank', 'noopener');
     });
   });
 </script>

@@ -2,6 +2,7 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { TIPOS_DE_SERVICO } from './lib/servicos';
+import { ORDEM_PADRAO } from './lib/portfolio-regras';
 
 // Cada projeto do portfólio é um arquivo .md em src/content/portfolio/.
 // O nome do arquivo vira o endereço: meu-projeto.md -> /portfolio/meu-projeto
@@ -17,7 +18,7 @@ const portfolio = defineCollection({
       url: z.string().url().optional(),
       stack: z.array(z.string()).default([]),
       year: z.number().int(),
-      order: z.number().default(100),
+      order: z.number().default(ORDEM_PADRAO),
       draft: z.boolean().default(false),
     }),
 });

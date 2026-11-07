@@ -45,5 +45,5 @@ A seção Projetos da página inicial, que mostra todos os Projetos publicados, 
 _Avoid_: slider, destaques
 
 **Rótulo**:
-A linha que situa o Projeto: o tipo de entrega e para qual cliente.
+A linha que situa o Projeto: o tipo de entrega e para qual cliente. No topo do estudo de caso, vem com o ano.
 _Avoid_: subtítulo, categoria
