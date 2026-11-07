@@ -7,36 +7,31 @@
 import { Image } from 'astro:assets';
 import TituloProjeto from './TituloProjeto.astro';
 import type { Projeto } from '../lib/portfolio';
+import { INTERVALO_MS, atributosDoSlide, contador, estadoDoSlide } from '../lib/carrossel';
 
 interface Props {
   projetos: Projeto[];
 }
 const { projetos } = Astro.props;
 const n = projetos.length;
-const metade = Math.floor(n / 2);
-/** Distância circular do slide i até o centro (0 = centro, negativo = à esquerda). */
-const distancia = (i: number) => ((((i % n) + n + metade) % n) - metade);
-const dois = (x: number) => String(x).padStart(2, '0');
+const inicio = contador(0, n);
 ---
-<div class="carrossel" data-carrossel role="region" aria-roledescription="carrossel" aria-label="Projetos" tabindex="0">
+<div class="carrossel" data-carrossel role="region" aria-roledescription="carrossel" aria-label="Projetos" tabindex="0" style={`--intervalo:${INTERVALO_MS}ms`}>
   <div class="palco" data-palco>
     {projetos.map((p, i) => {
-      const d = distancia(i);
+      const estado = estadoDoSlide(i, 0, n);
       return (
         <article
           class="slide"
           data-slide
-          data-ativo={d === 0 ? '' : undefined}
-          data-oculto={Math.abs(d) > 1 ? '' : undefined}
-          style={`--d:${d};--ad:${Math.abs(d)}`}
           aria-roledescription="slide"
           aria-label={`${i + 1} de ${n}`}
-          aria-hidden={d === 0 ? undefined : 'true'}
+          {...atributosDoSlide(estado)}
         >
-          <a href={p.href} class="slide__card" tabindex={d === 0 ? 0 : -1} draggable="false">
+          <a href={p.href} class="slide__card" tabindex={estado.ativo ? 0 : -1} draggable="false">
             <div class="slide__capa">
               {p.data.cover ? (
-                <Image src={p.data.cover} alt="" widths={[640, 960, 1280]} sizes="(min-width: 768px) 440px, 76vw" loading={d === 0 ? 'eager' : 'lazy'} draggable="false" />
+                <Image src={p.data.cover} alt="" widths={[640, 960, 1280]} sizes="(min-width: 768px) 440px, 76vw" loading={estado.ativo ? 'eager' : 'lazy'} draggable="false" />
               ) : (
                 <div class="slide__sem-capa" aria-hidden="true">{'</>'}</div>
               )}
@@ -63,7 +58,7 @@ const dois = (x: number) => String(x).padStart(2, '0');
           <button type="button" class="ponto" data-ponto={i} aria-label={`Ir para ${p.data.title}`} aria-current={i === 0 ? 'true' : undefined}></button>
         ))}
       </div>
-      <p class="contador" aria-live="polite"><span data-contador>{dois(1)}</span> / {dois(n)}</p>
+      <p class="contador" aria-live="polite"><span data-contador>{inicio.atual}</span> / {inicio.total}</p>
       <button type="button" class="seta" data-proximo aria-label="Próximo projeto">
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
       </button>
@@ -73,12 +68,12 @@ const dois = (x: number) => String(x).padStart(2, '0');
 </div>
 
 <script>
-  const INTERVALO = 6000;
+  import { INTERVALO_MS, atributosDoSlide, contador, estadoDoSlide, normalizar } from '../lib/carrossel';
 
   for (const raiz of document.querySelectorAll<HTMLElement>('[data-carrossel]')) {
     const slides = [...raiz.querySelectorAll<HTMLElement>('[data-slide]')];
     const pontos = [...raiz.querySelectorAll<HTMLButtonElement>('[data-ponto]')];
-    const contador = raiz.querySelector<HTMLElement>('[data-contador]');
+    const rotuloContador = raiz.querySelector<HTMLElement>('[data-contador]');
     const progresso = raiz.querySelector<HTMLElement>('[data-progresso]');
     const n = slides.length;
     if (n < 2) continue;
@@ -88,25 +83,21 @@ const dois = (x: number) => String(x).padStart(2, '0');
     let timer = 0;
     let pausas = new Set<string>();
 
-    const distancia = (i: number) => ((((i - atual) % n) + n + Math.floor(n / 2)) % n) - Math.floor(n / 2);
-
     function render() {
       slides.forEach((slide, i) => {
-        const d = distancia(i);
-        slide.style.setProperty('--d', String(d));
-        slide.style.setProperty('--ad', String(Math.abs(d)));
-        slide.toggleAttribute('data-ativo', d === 0);
-        slide.toggleAttribute('data-oculto', Math.abs(d) > 1);
-        if (d === 0) slide.removeAttribute('aria-hidden');
-        else slide.setAttribute('aria-hidden', 'true');
-        slide.querySelector('a')!.tabIndex = d === 0 ? 0 : -1;
+        const estado = estadoDoSlide(i, atual, n);
+        for (const [nome, valor] of Object.entries(atributosDoSlide(estado))) {
+          if (valor === undefined) slide.removeAttribute(nome);
+          else slide.setAttribute(nome, valor);
+        }
+        slide.querySelector('a')!.tabIndex = estado.ativo ? 0 : -1;
       });
       pontos.forEach((p, i) => (i === atual ? p.setAttribute('aria-current', 'true') : p.removeAttribute('aria-current')));
-      if (contador) contador.textContent = String(atual + 1).padStart(2, '0');
+      if (rotuloContador) rotuloContador.textContent = contador(atual, n).atual;
     }
 
     function ir(i: number) {
-      atual = ((i % n) + n) % n;
+      atual = normalizar(i, n);
       render();
       agendar();
     }
@@ -117,7 +108,7 @@ const dois = (x: number) => String(x).padStart(2, '0');
       if (semMovimento.matches || pausas.size) return;
       void progresso?.offsetWidth; // reinicia a animação da barra
       progresso?.classList.add('is-correndo');
-      timer = window.setTimeout(() => ir(atual + 1), INTERVALO);
+      timer = window.setTimeout(() => ir(atual + 1), INTERVALO_MS);
     }
 
     const pausar = (motivo: string, sim: boolean) => {
@@ -137,7 +128,7 @@ const dois = (x: number) => String(x).padStart(2, '0');
     // Clique num card lateral traz ele para o centro em vez de abrir o link.
     slides.forEach((slide, i) =>
       slide.addEventListener('click', (e) => {
-        if (arrastou || distancia(i) !== 0) {
+        if (arrastou || !estadoDoSlide(i, atual, n).ativo) {
           e.preventDefault();
           if (!arrastou) ir(i);
         }
@@ -377,7 +368,7 @@ const dois = (x: number) => String(x).padStart(2, '0');
     background: var(--color-linha);
   }
   .progresso span { display: block; width: 0; height: 100%; background: var(--color-codigo); }
-  .progresso span.is-correndo { animation: progresso 6s linear forwards; }
+  .progresso span.is-correndo { animation: progresso var(--intervalo) linear forwards; }
   @keyframes progresso { to { width: 100%; } }
 
   @media (prefers-reduced-motion: reduce) {
