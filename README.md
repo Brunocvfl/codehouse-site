@@ -28,7 +28,11 @@ npm test          # roda os testes
 ## Adicionar um projeto ao portfólio
 1. Copie `src/content/portfolio/_exemplo.md` para um novo arquivo, ex.: `loja-da-ana.md`.
 2. Preencha os campos. Coloque a imagem em `src/content/portfolio/imagens/` e aponte em `cover`.
-3. Mude `draft` para `false`. Com `featured: true` o projeto também aparece na home.
+   Use capturas em 2x (ex.: 3200×2000): o site gera os tamanhos menores sozinho, e no celular o toque abre a versão maior.
+   Imagens do texto vão em markdown (`![descrição](./imagens/...)`), inclusive WebP animado: em `src/lib/imagens.ts`
+   ficam os perfis (capa, card, slide, texto) que definem os tamanhos gerados. Animações: no máximo 1920 px de largura,
+   senão o Sharp passa do limite de pixels e a imagem sai sem otimizar.
+3. Mude `draft` para `false`. O projeto entra sozinho no carrossel da home, na posição definida por `order`.
 4. A página fica em `/portfolio/loja-da-ana`.
 
 ## Publicar na Vercel + Registro.br

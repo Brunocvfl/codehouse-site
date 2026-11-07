@@ -1,5 +1,6 @@
 ---
-import { Image } from 'astro:assets';
+import ImagemProjeto from './ImagemProjeto.astro';
+import TituloProjeto from './TituloProjeto.astro';
 import type { Projeto } from '../lib/portfolio';
 
 interface Props {
@@ -10,16 +11,12 @@ const d = projeto.data;
 ---
 <article class="group relative flex flex-col overflow-hidden rounded-xl border border-linha bg-noite-2 transition-colors hover:border-codigo/60">
   <div class="aspect-[16/10] overflow-hidden bg-indigo">
-    {d.cover ? (
-      <Image src={d.cover} alt="" widths={[480, 800]} sizes="(min-width: 1024px) 380px, 100vw" class="size-full object-cover" />
-    ) : (
-      <div class="grid size-full place-items-center font-mono text-3xl text-codigo/60" aria-hidden="true">{'</>'}</div>
-    )}
+    <ImagemProjeto perfil="card" src={d.cover} alt="" class="size-full object-cover" />
   </div>
   <div class="flex flex-1 flex-col p-5">
     <p class="text-sm text-nevoa-2">{projeto.rotulo}</p>
     <h3 class="mt-1 text-lg font-semibold">
-      <a href={projeto.href} class="after:absolute after:inset-0">{d.title}</a>
+      <a href={projeto.href} class="after:absolute after:inset-0"><TituloProjeto texto={d.title} /></a>
     </h3>
     <p class="mt-2 text-sm text-nevoa-2">{d.summary}</p>
   </div>

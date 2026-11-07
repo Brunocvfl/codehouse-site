@@ -17,7 +17,6 @@ const portfolio = defineCollection({
       url: z.string().url().optional(),
       stack: z.array(z.string()).default([]),
       year: z.number().int(),
-      featured: z.boolean().default(false),
       order: z.number().default(100),
       draft: z.boolean().default(false),
     }),

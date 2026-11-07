@@ -9,7 +9,6 @@ summary: Uma ou duas frases sobre o problema do cliente e o que foi entregue.
 url: https://exemplo.com.br
 stack: [Astro, Tailwind]
 year: 2026
-featured: true # aparece na home
 order: 1 # menor aparece primeiro
 draft: true
 ---

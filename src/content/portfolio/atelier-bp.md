@@ -6,7 +6,6 @@ summary: Site de um ateliê de impressão 3D e bottons, com um configurador em q
 cover: ./imagens/atelier-bp/hero.webp
 stack: [HTML, CSS, JavaScript, Canvas]
 year: 2026
-featured: false
 order: 4
 draft: false
 ---
@@ -25,7 +24,7 @@ O Atelier BP é um ateliê de **impressão 3D e bottons personalizados**: peças
 
 Um site estático, sem framework, com a identidade colorida do ateliê. No topo, o emblema do Atelier BP é "impresso" camada por camada, com o bico de uma impressora 3D subindo junto, como acontece numa impressão de verdade.
 
-![Emblema sendo impresso camada por camada na abertura do site](./imagens/atelier-bp/hero-imprimindo.webp)
+![Abertura do site: o emblema sendo impresso camada por camada, com o bico da impressora subindo](./imagens/atelier-bp/impressao.webp)
 
 ### Monte seu botton
 

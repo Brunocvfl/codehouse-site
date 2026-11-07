@@ -6,7 +6,6 @@ summary: Editor que transforma os dados de scrap de uma máquina num infográfic
 cover: ./imagens/red-bin/editor.webp
 stack: [Python, Flask, JavaScript, SVG, html2canvas]
 year: 2026
-featured: true
 order: 2
 draft: false
 ---

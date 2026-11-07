@@ -32,13 +32,17 @@ _Avoid_: menu de serviços, tipos
 Um trabalho entregue a um cliente, publicado como estudo de caso com página própria.
 _Avoid_: case, trabalho, item
 
+**Capa**:
+A imagem principal do Projeto: aparece no topo do estudo de caso, no card do portfólio e no Carrossel de Projetos.
+_Avoid_: thumbnail, banner, cover
+
 **Rascunho**:
 Projeto ainda não publicado; não aparece em nenhuma página do site.
 _Avoid_: oculto, privado
 
-**Destaque**:
-Projeto escolhido para aparecer também na página inicial.
-_Avoid_: featured, favorito
+**Carrossel de Projetos**:
+A seção Projetos da página inicial, que mostra todos os Projetos publicados, na ordem do portfólio.
+_Avoid_: slider, destaques
 
 **Rótulo**:
 A linha que situa o Projeto: o tipo de entrega e para qual cliente.

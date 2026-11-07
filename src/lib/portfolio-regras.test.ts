@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { filtrarDestaques, montarProjetos } from './portfolio-regras';
+import { montarProjetos } from './portfolio-regras';
 
-const entrada = (id: string, dados: Partial<{ draft: boolean; featured: boolean; order: number; year: number }> = {}) => ({
+const entrada = (id: string, dados: Partial<{ draft: boolean; order: number; year: number }> = {}) => ({
   id,
-  data: { draft: false, featured: false, order: 100, year: 2026, type: 'Landing page', client: 'Padaria Pão Quente', ...dados },
+  data: { draft: false, order: 100, year: 2026, type: 'Landing page', client: 'Padaria Pão Quente', ...dados },
 });
 
 describe('montarProjetos', () => {
@@ -31,17 +31,5 @@ describe('montarProjetos', () => {
     const lista = [entrada('b', { order: 2 }), entrada('a', { order: 1 })];
     montarProjetos(lista);
     expect(lista.map((e) => e.id)).toEqual(['b', 'a']);
-  });
-});
-
-describe('filtrarDestaques', () => {
-  it('pega só os featured, até o limite, mantendo a ordem', () => {
-    const projetos = montarProjetos([
-      entrada('x', { featured: true, order: 3 }),
-      entrada('y', { order: 1 }),
-      entrada('z', { featured: true, order: 2 }),
-      entrada('w', { featured: true, order: 4 }),
-    ]);
-    expect(filtrarDestaques(projetos, 2).map((p) => p.id)).toEqual(['z', 'x']);
   });
 });

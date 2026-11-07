@@ -1,0 +1,98 @@
+---
+// Imagens do estudo de caso que ampliam.
+// Com mouse: a imagem cresce um pouco ao passar o cursor (só CSS).
+// Sem hover (celular, tablet): tocar abre a imagem em tela cheia, na maior versão do srcset.
+interface Props {
+  /** Seletor das imagens que ampliam. */
+  alvo: string;
+}
+const { alvo } = Astro.props;
+---
+<imagem-ampliavel data-alvo={alvo}></imagem-ampliavel>
+
+<script>
+  /** URL da maior versão disponível: o maior "w" do srcset, ou o próprio src. */
+  function maiorVersao(img: HTMLImageElement): string {
+    const candidatos = (img.getAttribute('srcset') ?? '')
+      .split(',')
+      .map((c) => c.trim().split(/\s+/))
+      .filter(([url, w]) => url && w?.endsWith('w'))
+      .map(([url, w]) => ({ url, w: parseInt(w, 10) }))
+      .sort((a, b) => b.w - a.w);
+    return new URL(candidatos[0]?.url ?? img.currentSrc ?? img.src, location.href).href;
+  }
+
+  class ImagemAmpliavel extends HTMLElement {
+    connectedCallback() {
+      const imagens = [...document.querySelectorAll<HTMLImageElement>(this.dataset.alvo ?? '')];
+      for (const img of imagens) img.classList.add('ampliavel');
+      if (!imagens.length || matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+      const dialogo = document.createElement('dialog');
+      dialogo.className = 'ampliavel-dialogo';
+      dialogo.innerHTML = '<img alt=""><button type="button" class="ampliavel-fechar" aria-label="Fechar">×</button>';
+      document.body.append(dialogo);
+      const grande = dialogo.querySelector('img')!;
+      dialogo.addEventListener('click', () => dialogo.close());
+
+      for (const img of imagens) {
+        img.addEventListener('click', () => {
+          grande.src = maiorVersao(img);
+          grande.alt = img.alt;
+          dialogo.showModal();
+        });
+      }
+    }
+  }
+
+  customElements.define('imagem-ampliavel', ImagemAmpliavel);
+</script>
+
+<style is:global>
+  @media (hover: hover) and (pointer: fine) {
+    .ampliavel {
+      position: relative;
+      transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s ease;
+    }
+    .ampliavel:hover {
+      z-index: 10;
+      transform: scale(1.1);
+      box-shadow: 0 24px 70px rgb(0 0 0 / 0.55);
+    }
+  }
+  @media (hover: none), (pointer: coarse) {
+    .ampliavel { cursor: zoom-in; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ampliavel { transition: none; }
+  }
+
+  .ampliavel-dialogo {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgb(0 0 0 / 0.97);
+  }
+  .ampliavel-dialogo[open] { display: grid; place-items: center; }
+  .ampliavel-dialogo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  .ampliavel-fechar {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.15);
+    color: #fff;
+    font-size: 28px;
+    line-height: 1;
+  }
+</style>
