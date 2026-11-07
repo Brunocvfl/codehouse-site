@@ -14,6 +14,8 @@ interface Servico {
   recebe: readonly string[];
   /** Assunto da mensagem de WhatsApp de "Pedir orçamento". */
   assunto: string;
+  /** Texto curto do botão de sugestão no formulário "Conte sua ideia". */
+  sugestao: string;
 }
 
 export const SERVICOS = [
@@ -26,6 +28,7 @@ export const SERVICOS = [
       'Quem vocês são, o que fazem e como falar com vocês, num site que passa confiança e aparece no Google.',
     recebe: ['Domínio e hospedagem configurados', 'Layout próprio, adaptado ao celular', 'SEO básico e Google Analytics'],
     assunto: 'Quero um site institucional para o meu negócio.',
+    sugestao: 'Quero um site para minha empresa',
   },
   {
     id: 'landing',
@@ -36,6 +39,7 @@ export const SERVICOS = [
       'Uma página focada em vender, captar contatos ou agendar. Cada bloco existe para levar o visitante até o botão.',
     recebe: ['Texto orientado à conversão', 'Carregamento rápido no celular', 'WhatsApp, pixel e analytics integrados'],
     assunto: 'Quero uma landing page para uma oferta.',
+    sugestao: 'Preciso de uma landing page',
   },
   {
     id: 'sistemas',
@@ -46,6 +50,7 @@ export const SERVICOS = [
       'Painéis, cadastros, agendamentos, pedidos e relatórios que substituem planilhas e processos manuais.',
     recebe: ['Login com níveis de acesso', 'Banco de dados e backups', 'Relatórios e exportação'],
     assunto: 'Preciso de um sistema web sob medida.',
+    sugestao: 'Quero um sistema para organizar meu negócio',
   },
   {
     id: 'aplicacoes',
@@ -56,6 +61,7 @@ export const SERVICOS = [
       'Front-end, back-end, integrações e infraestrutura para lançar uma plataforma, um SaaS ou um app web.',
     recebe: ['Arquitetura pronta para crescer', 'Pagamentos, e-mail e APIs', 'Deploy, monitoramento e suporte'],
     assunto: 'Quero tirar uma aplicação do papel.',
+    sugestao: 'Tenho uma ideia de plataforma web',
   },
 ] as const satisfies readonly Servico[];
 

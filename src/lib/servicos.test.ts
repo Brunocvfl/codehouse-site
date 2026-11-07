@@ -11,6 +11,11 @@ describe('Catálogo de Serviços', () => {
     expect(new Set(TIPOS_DE_SERVICO).size).toBe(SERVICOS.length);
   });
 
+  it('cada serviço tem uma sugestão única (o formulário reconhece por ela)', () => {
+    const sugestoes = SERVICOS.map((s) => s.sugestao);
+    expect(new Set(sugestoes).size).toBe(sugestoes.length);
+  });
+
   it('os tipos aceitos no portfólio seguem a ordem do catálogo', () => {
     expect(TIPOS_DE_SERVICO).toEqual(['Site institucional', 'Landing page', 'Sistema web', 'Aplicação']);
   });

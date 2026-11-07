@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { montarProjetos } from './portfolio-regras';
+import { ORDEM_PADRAO, montarProjetos } from './portfolio-regras';
 
 const entrada = (id: string, dados: Partial<{ draft: boolean; order: number; year: number }> = {}) => ({
   id,
-  data: { draft: false, order: 100, year: 2026, type: 'Landing page', client: 'Padaria Pão Quente', ...dados },
+  data: { draft: false, order: ORDEM_PADRAO, year: 2026, type: 'Landing page' as const, client: 'Padaria Pão Quente', ...dados },
 });
 
 describe('montarProjetos', () => {
@@ -21,10 +21,11 @@ describe('montarProjetos', () => {
     expect(ids).toEqual(['novo', 'antigo', 'depois']);
   });
 
-  it('monta href e rótulo de cada projeto', () => {
+  it('monta href e as duas formas do rótulo de cada projeto', () => {
     const [p] = montarProjetos([entrada('loja-da-ana')]);
     expect(p.href).toBe('/portfolio/loja-da-ana');
     expect(p.rotulo).toBe('Landing page para Padaria Pão Quente');
+    expect(p.rotuloComAno).toBe('Landing page para Padaria Pão Quente, 2026');
   });
 
   it('não altera a lista recebida', () => {
