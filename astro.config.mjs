@@ -13,11 +13,11 @@ export default defineConfig({
   image: {
     layout: 'constrained',
     breakpoints: [640, 960, 1280, 1920, 2560, 3200],
-    // As imagens são capturas de tela com texto: qualidade alta e cor sem subamostragem
-    // grosseira, para as letras não borrarem.
+    // Capturas de tela com texto: qualidade 90 (ver src/lib/servico-imagem.ts) e cor sem
+    // subamostragem grosseira, para as letras não borrarem.
     service: {
-      entrypoint: 'astro/assets/services/sharp',
-      config: { webp: { quality: 90, smartSubsample: true } },
+      entrypoint: './src/lib/servico-imagem.ts',
+      config: { webp: { smartSubsample: true } },
     },
   },
   vite: {
