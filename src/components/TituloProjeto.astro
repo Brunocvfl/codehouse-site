@@ -1,0 +1,16 @@
+---
+// Título de Projeto. O "&" da Russo One é angular demais e lê mal em nomes
+// como "Print & Crafts"; ele é desenhado na fonte do texto, o resto fica na Russo One.
+interface Props {
+  texto: string;
+}
+const partes = Astro.props.texto.split(/(&)/);
+---
+{partes.map((parte) => (parte === '&' ? <span class="e-comercial">&amp;</span> : parte))}
+
+<style>
+  .e-comercial {
+    font-family: var(--font-sans);
+    font-weight: 600;
+  }
+</style>

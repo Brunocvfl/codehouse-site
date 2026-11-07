@@ -25,7 +25,7 @@ O Atelier BP é um ateliê de **impressão 3D e bottons personalizados**: peças
 
 Um site estático, sem framework, com a identidade colorida do ateliê. No topo, o emblema do Atelier BP é "impresso" camada por camada, com o bico de uma impressora 3D subindo junto, como acontece numa impressão de verdade.
 
-![Emblema sendo impresso camada por camada na abertura do site](./imagens/atelier-bp/hero-imprimindo.webp)
+<img src="/portfolio/atelier-bp/impressao.webp" alt="Abertura do site: o emblema sendo impresso camada por camada, com o bico da impressora subindo" width="3200" height="2000" loading="lazy" decoding="async">
 
 ### Monte seu botton
 

@@ -1,0 +1,140 @@
+---
+// Lupa das imagens do estudo de caso.
+// Com mouse: uma lente redonda segue o cursor e mostra o trecho ampliado, usando a
+// maior versão do srcset (baixada só no primeiro hover).
+// Sem hover (celular, tablet): tocar abre a imagem em tela cheia.
+interface Props {
+  /** Seletor das imagens que ganham a lupa. */
+  alvo: string;
+}
+const { alvo } = Astro.props;
+---
+<lupa-imagens data-alvo={alvo}></lupa-imagens>
+
+<script>
+  const ZOOM = 2.5;
+  const LENTE = 240; // diâmetro em px
+
+  /** URL da maior versão disponível: o maior "w" do srcset, ou o próprio src. */
+  function maiorVersao(img: HTMLImageElement): string {
+    const candidatos = (img.getAttribute('srcset') ?? '')
+      .split(',')
+      .map((c) => c.trim().split(/\s+/))
+      .filter(([url, w]) => url && w?.endsWith('w'))
+      .map(([url, w]) => ({ url, w: parseInt(w, 10) }))
+      .sort((a, b) => b.w - a.w);
+    return new URL(candidatos[0]?.url ?? img.currentSrc ?? img.src, location.href).href;
+  }
+
+  class LupaImagens extends HTMLElement {
+    connectedCallback() {
+      const imagens = [...document.querySelectorAll<HTMLImageElement>(this.dataset.alvo ?? '')];
+      if (!imagens.length) return;
+      if (matchMedia('(hover: hover) and (pointer: fine)').matches) this.lente(imagens);
+      else this.telaCheia(imagens);
+    }
+
+    lente(imagens: HTMLImageElement[]) {
+      const lente = document.createElement('div');
+      lente.className = 'lupa-lente';
+      lente.setAttribute('aria-hidden', 'true');
+      lente.style.width = lente.style.height = `${LENTE}px`;
+      document.body.append(lente);
+
+      const esconder = () => lente.classList.remove('is-visivel');
+      for (const img of imagens) {
+        img.classList.add('lupa-alvo');
+        img.addEventListener('pointerenter', () => {
+          const url = maiorVersao(img);
+          if (lente.dataset.url !== url) {
+            lente.dataset.url = url;
+            lente.style.backgroundImage = `url("${url}")`;
+          }
+          lente.classList.add('is-visivel');
+        });
+        img.addEventListener('pointermove', (e) => {
+          const r = img.getBoundingClientRect();
+          const x = e.clientX - r.left;
+          const y = e.clientY - r.top;
+          lente.style.transform = `translate(${e.clientX - LENTE / 2}px, ${e.clientY - LENTE / 2}px)`;
+          lente.style.backgroundSize = `${r.width * ZOOM}px ${r.height * ZOOM}px`;
+          lente.style.backgroundPosition = `${LENTE / 2 - x * ZOOM}px ${LENTE / 2 - y * ZOOM}px`;
+        });
+        img.addEventListener('pointerleave', esconder);
+      }
+      addEventListener('scroll', esconder, { passive: true });
+    }
+
+    telaCheia(imagens: HTMLImageElement[]) {
+      const dialogo = document.createElement('dialog');
+      dialogo.className = 'lupa-dialogo';
+      dialogo.innerHTML = '<img alt=""><button type="button" class="lupa-fechar" aria-label="Fechar">×</button>';
+      document.body.append(dialogo);
+      const grande = dialogo.querySelector('img')!;
+      dialogo.addEventListener('click', () => dialogo.close());
+
+      for (const img of imagens) {
+        img.classList.add('lupa-alvo');
+        img.addEventListener('click', () => {
+          grande.src = maiorVersao(img);
+          grande.alt = img.alt;
+          dialogo.showModal();
+        });
+      }
+    }
+  }
+
+  customElements.define('lupa-imagens', LupaImagens);
+</script>
+
+<style is:global>
+  .lupa-alvo { cursor: zoom-in; }
+
+  .lupa-lente {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 60;
+    border-radius: 50%;
+    border: 2px solid var(--color-codigo);
+    background-color: var(--color-noite);
+    background-repeat: no-repeat;
+    box-shadow: 0 12px 40px rgb(0 0 0 / 0.45);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  .lupa-lente.is-visivel { opacity: 1; }
+  @media (hover: hover) and (pointer: fine) {
+    .lupa-alvo:hover { cursor: none; }
+  }
+
+  .lupa-dialogo {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgb(0 0 0 / 0.97);
+  }
+  .lupa-dialogo[open] { display: grid; place-items: center; }
+  .lupa-dialogo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  .lupa-fechar {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.15);
+    color: #fff;
+    font-size: 28px;
+    line-height: 1;
+  }
+</style>

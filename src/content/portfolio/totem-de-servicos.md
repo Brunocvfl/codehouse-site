@@ -3,7 +3,7 @@ title: Totem de Serviços multi-idioma
 client: indústria multinacional
 type: Sistema web
 summary: Tela touch que leva os colaboradores aos portais de RH, segurança e TI em três idiomas, com temas sazonais trocados por configuração e sem reiniciar o sistema.
-cover: ./imagens/totem-de-servicos/halloween.webp
+cover: ./imagens/totem-de-servicos/padrao.webp
 stack: [Python, Flask, Waitress, JavaScript, CSS]
 year: 2026
 featured: true
@@ -29,8 +29,6 @@ Uma aplicação Flask em que **tudo o que muda fica num único arquivo de config
 Se alguém salvar o arquivo com erro (uma vírgula esquecida, um link sem `https://`), a validação recusa a versão nova, **a tela continua com a última versão válida** e o motivo vai para o log. Um erro de digitação nunca derruba o totem.
 
 O comportamento de quiosque fica no front-end: alvos de toque grandes, zoom e seleção bloqueados e recarga automática da tela quando ela fica parada. No navegador, o modo quiosque reinicia a sessão após alguns minutos sem uso e apaga os logins de quem usou o totem antes. Os arquivos estáticos levam a data de modificação na URL, e os totens baixam a versão nova sozinhos. Os ícones são servidos localmente, então a tela funciona mesmo sem acesso à internet.
-
-![Tela padrão do totem, com os quatro cards de serviço](./imagens/totem-de-servicos/padrao.webp)
 
 ## Temas sazonais
 
