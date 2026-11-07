@@ -9,9 +9,17 @@ export default defineConfig({
   integrations: [sitemap()],
   // CSS embutido no HTML: evita a requisição que bloqueava a primeira pintura.
   build: { inlineStylesheets: 'always' },
-  // Imagens do markdown ganham srcset (o navegador baixa só o tamanho necessário;
-  // a lupa do estudo de caso pede a maior versão sob demanda).
-  image: { layout: 'constrained', breakpoints: [640, 960, 1280, 1920, 2560, 3200] },
+  // Imagens do markdown ganham srcset: o navegador baixa só o tamanho necessário.
+  image: {
+    layout: 'constrained',
+    breakpoints: [640, 960, 1280, 1920, 2560, 3200],
+    // As imagens são capturas de tela com texto: qualidade alta e cor sem subamostragem
+    // grosseira, para as letras não borrarem.
+    service: {
+      entrypoint: 'astro/assets/services/sharp',
+      config: { webp: { quality: 90, smartSubsample: true } },
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
   },

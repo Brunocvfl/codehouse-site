@@ -1,0 +1,387 @@
+---
+// Carrossel de Projetos (página inicial): coverflow 3D com todos os Projetos publicados.
+// O card do centro fica de frente; os vizinhos inclinam em perspectiva.
+// Setas, pontos, teclado (← →), arrastar e clique num card lateral trocam o projeto.
+// Troca sozinho a cada 6 s; pausa com o mouse em cima, com foco, fora da tela ou com
+// "reduzir movimento" ligado. A posição inicial já vem do servidor (funciona sem JS).
+import { Image } from 'astro:assets';
+import TituloProjeto from './TituloProjeto.astro';
+import type { Projeto } from '../lib/portfolio';
+
+interface Props {
+  projetos: Projeto[];
+}
+const { projetos } = Astro.props;
+const n = projetos.length;
+const metade = Math.floor(n / 2);
+/** Distância circular do slide i até o centro (0 = centro, negativo = à esquerda). */
+const distancia = (i: number) => ((((i % n) + n + metade) % n) - metade);
+const dois = (x: number) => String(x).padStart(2, '0');
+---
+<div class="carrossel" data-carrossel role="region" aria-roledescription="carrossel" aria-label="Projetos" tabindex="0">
+  <div class="palco" data-palco>
+    {projetos.map((p, i) => {
+      const d = distancia(i);
+      return (
+        <article
+          class="slide"
+          data-slide
+          data-ativo={d === 0 ? '' : undefined}
+          data-oculto={Math.abs(d) > 1 ? '' : undefined}
+          style={`--d:${d};--ad:${Math.abs(d)}`}
+          aria-roledescription="slide"
+          aria-label={`${i + 1} de ${n}`}
+          aria-hidden={d === 0 ? undefined : 'true'}
+        >
+          <a href={p.href} class="slide__card" tabindex={d === 0 ? 0 : -1} draggable="false">
+            <div class="slide__capa">
+              {p.data.cover ? (
+                <Image src={p.data.cover} alt="" widths={[640, 960, 1280]} sizes="(min-width: 768px) 640px, 80vw" loading={d === 0 ? 'eager' : 'lazy'} draggable="false" />
+              ) : (
+                <div class="slide__sem-capa" aria-hidden="true">{'</>'}</div>
+              )}
+            </div>
+            <div class="slide__texto">
+              <p class="slide__rotulo">{p.rotulo}</p>
+              <h3 class="slide__titulo"><TituloProjeto texto={p.data.title} /></h3>
+              <p class="slide__resumo">{p.data.summary}</p>
+              <span class="slide__abrir">Ver estudo de caso <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+        </article>
+      );
+    })}
+  </div>
+
+  {n > 1 && (
+    <div class="controles">
+      <button type="button" class="seta" data-anterior aria-label="Projeto anterior">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </button>
+      <div class="pontos">
+        {projetos.map((p, i) => (
+          <button type="button" class="ponto" data-ponto={i} aria-label={`Ir para ${p.data.title}`} aria-current={i === 0 ? 'true' : undefined}></button>
+        ))}
+      </div>
+      <p class="contador" aria-live="polite"><span data-contador>{dois(1)}</span> / {dois(n)}</p>
+      <button type="button" class="seta" data-proximo aria-label="Próximo projeto">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </button>
+    </div>
+  )}
+  {n > 1 && <div class="progresso" aria-hidden="true"><span data-progresso></span></div>}
+</div>
+
+<script>
+  const INTERVALO = 6000;
+
+  for (const raiz of document.querySelectorAll<HTMLElement>('[data-carrossel]')) {
+    const slides = [...raiz.querySelectorAll<HTMLElement>('[data-slide]')];
+    const pontos = [...raiz.querySelectorAll<HTMLButtonElement>('[data-ponto]')];
+    const contador = raiz.querySelector<HTMLElement>('[data-contador]');
+    const progresso = raiz.querySelector<HTMLElement>('[data-progresso]');
+    const n = slides.length;
+    if (n < 2) continue;
+
+    const semMovimento = matchMedia('(prefers-reduced-motion: reduce)');
+    let atual = 0;
+    let timer = 0;
+    let pausas = new Set<string>();
+
+    const distancia = (i: number) => ((((i - atual) % n) + n + Math.floor(n / 2)) % n) - Math.floor(n / 2);
+
+    function render() {
+      slides.forEach((slide, i) => {
+        const d = distancia(i);
+        slide.style.setProperty('--d', String(d));
+        slide.style.setProperty('--ad', String(Math.abs(d)));
+        slide.toggleAttribute('data-ativo', d === 0);
+        slide.toggleAttribute('data-oculto', Math.abs(d) > 1);
+        if (d === 0) slide.removeAttribute('aria-hidden');
+        else slide.setAttribute('aria-hidden', 'true');
+        slide.querySelector('a')!.tabIndex = d === 0 ? 0 : -1;
+      });
+      pontos.forEach((p, i) => (i === atual ? p.setAttribute('aria-current', 'true') : p.removeAttribute('aria-current')));
+      if (contador) contador.textContent = String(atual + 1).padStart(2, '0');
+    }
+
+    function ir(i: number) {
+      atual = ((i % n) + n) % n;
+      render();
+      agendar();
+    }
+
+    function agendar() {
+      clearTimeout(timer);
+      progresso?.classList.remove('is-correndo');
+      if (semMovimento.matches || pausas.size) return;
+      void progresso?.offsetWidth; // reinicia a animação da barra
+      progresso?.classList.add('is-correndo');
+      timer = window.setTimeout(() => ir(atual + 1), INTERVALO);
+    }
+
+    const pausar = (motivo: string, sim: boolean) => {
+      if (sim) pausas.add(motivo);
+      else pausas.delete(motivo);
+      agendar();
+    };
+
+    raiz.querySelector('[data-anterior]')?.addEventListener('click', () => ir(atual - 1));
+    raiz.querySelector('[data-proximo]')?.addEventListener('click', () => ir(atual + 1));
+    pontos.forEach((p, i) => p.addEventListener('click', () => ir(i)));
+    raiz.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); ir(atual - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); ir(atual + 1); }
+    });
+
+    // Clique num card lateral traz ele para o centro em vez de abrir o link.
+    slides.forEach((slide, i) =>
+      slide.addEventListener('click', (e) => {
+        if (arrastou || distancia(i) !== 0) {
+          e.preventDefault();
+          if (!arrastou) ir(i);
+        }
+      }),
+    );
+
+    // Arrastar (mouse ou dedo).
+    let inicioX: number | null = null;
+    let arrastou = false;
+    const palco = raiz.querySelector<HTMLElement>('[data-palco]')!;
+    palco.addEventListener('pointerdown', (e) => {
+      inicioX = e.clientX;
+      arrastou = false;
+    });
+    palco.addEventListener('pointermove', (e) => {
+      if (inicioX !== null && Math.abs(e.clientX - inicioX) > 8) arrastou = true;
+    });
+    const soltar = (e: PointerEvent) => {
+      if (inicioX === null) return;
+      const dx = e.clientX - inicioX;
+      inicioX = null;
+      if (Math.abs(dx) > 50) ir(atual + (dx < 0 ? 1 : -1));
+      setTimeout(() => (arrastou = false), 0);
+    };
+    palco.addEventListener('pointerup', soltar);
+    palco.addEventListener('pointercancel', () => (inicioX = null));
+
+    raiz.addEventListener('mouseenter', () => pausar('mouse', true));
+    raiz.addEventListener('mouseleave', () => pausar('mouse', false));
+    raiz.addEventListener('focusin', () => pausar('foco', true));
+    raiz.addEventListener('focusout', () => pausar('foco', false));
+    document.addEventListener('visibilitychange', () => pausar('aba', document.hidden));
+    new IntersectionObserver(([e]) => pausar('fora', !e.isIntersecting), { threshold: 0.3 }).observe(raiz);
+    semMovimento.addEventListener('change', agendar);
+
+    render();
+    agendar();
+  }
+</script>
+
+<style>
+  .carrossel {
+    --largura: min(640px, 82vw);
+    --passo: 62%;
+    --giro: -36deg;
+    --fundo: 220px;
+    position: relative;
+    outline: none;
+  }
+  @media (max-width: 767px) {
+    .carrossel { --passo: 74%; --giro: -24deg; --fundo: 160px; }
+  }
+
+  /* Palco em perspectiva: todos os slides no mesmo lugar da grade, deslocados por transform. */
+  .palco {
+    display: grid;
+    perspective: 1800px;
+    transform-style: preserve-3d;
+    padding-block: 1rem 2rem;
+    touch-action: pan-y;
+    user-select: none;
+    /* Com preserve-3d, os cards empurrados para trás ficam atrás do plano do palco:
+       o palco não pode receber o ponteiro, só os cards. */
+    pointer-events: none;
+  }
+  .palco::after {
+    /* brilho no "chão" do palco */
+    content: '';
+    grid-area: 1 / 1;
+    align-self: end;
+    justify-self: center;
+    width: min(900px, 100%);
+    height: 80px;
+    margin-bottom: -10px;
+    background: radial-gradient(closest-side, rgb(86 180 224 / 0.22), transparent);
+    filter: blur(8px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .slide {
+    grid-area: 1 / 1;
+    justify-self: center;
+    width: var(--largura);
+    z-index: calc(10 - var(--ad));
+    transform:
+      translateX(calc(var(--d) * var(--passo)))
+      translateZ(calc(var(--ad) * var(--fundo) * -1))
+      rotateY(calc(var(--d) * var(--giro)));
+    opacity: calc(1 - var(--ad) * 0.25);
+    filter: brightness(calc(1 - var(--ad) * 0.5)) saturate(calc(1 - var(--ad) * 0.3));
+    transition:
+      transform 0.75s cubic-bezier(0.2, 0.7, 0.2, 1),
+      opacity 0.75s ease,
+      filter 0.75s ease;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .slide[data-oculto] { opacity: 0; pointer-events: none; }
+
+  .slide__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid var(--color-linha);
+    border-radius: 16px;
+    background: var(--color-noite-2);
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    -webkit-user-drag: none;
+  }
+  .slide[data-ativo] .slide__card {
+    border-color: rgb(86 180 224 / 0.7);
+    box-shadow:
+      0 0 0 1px rgb(86 180 224 / 0.25),
+      0 30px 90px -25px rgb(86 180 224 / 0.45);
+  }
+
+  /* Cantos de "mira" em volta do card ativo (fora dele, para não cobrir a capa) */
+  .slide { position: relative; }
+  .slide::before,
+  .slide::after {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    width: 26px;
+    height: 26px;
+    border: 2px solid var(--color-codigo);
+    opacity: 0;
+    transition: opacity 0.4s ease 0.3s;
+    pointer-events: none;
+  }
+  .slide::before { top: -9px; left: -9px; border-right: 0; border-bottom: 0; border-top-left-radius: 8px; }
+  .slide::after { bottom: -9px; right: -9px; border-left: 0; border-top: 0; border-bottom-right-radius: 8px; }
+  .slide[data-ativo]::before,
+  .slide[data-ativo]::after { opacity: 1; }
+
+  .slide__capa {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--color-indigo);
+  }
+  .slide__capa :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    -webkit-user-drag: none;
+  }
+  /* Linha de varredura que passa pela capa quando o card chega ao centro */
+  .slide__capa::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 0%, rgb(155 214 242 / 0.35) 48%, rgb(155 214 242 / 0.6) 50%, transparent 52%);
+    background-size: 100% 220%;
+    background-position: 0 120%;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .slide[data-ativo] .slide__capa::after { animation: varredura 1.1s ease-out 0.35s; }
+  @keyframes varredura {
+    0% { opacity: 1; background-position: 0 120%; }
+    100% { opacity: 0; background-position: 0 -20%; }
+  }
+  .slide__sem-capa {
+    display: grid;
+    height: 100%;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    color: rgb(86 180 224 / 0.6);
+  }
+
+  .slide__texto { display: flex; flex: 1; flex-direction: column; padding: 1.25rem 1.4rem 1.4rem; }
+  .slide__rotulo { font-size: 0.875rem; color: var(--color-nevoa-2); }
+  .slide__titulo { margin-top: 0.3rem; font-size: 1.2rem; }
+  .slide__resumo { margin-top: 0.55rem; font-size: 0.9rem; line-height: 1.55; color: var(--color-nevoa-2); }
+  .slide__abrir {
+    margin-top: auto;
+    padding-top: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-codigo);
+    opacity: 0;
+    transition: opacity 0.4s ease 0.2s;
+  }
+  .slide[data-ativo] .slide__abrir { opacity: 1; }
+  .slide[data-ativo] .slide__card:hover .slide__abrir span { display: inline-block; transform: translateX(4px); }
+  .slide__abrir span { transition: transform 0.2s ease; }
+
+  .controles {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  .seta {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--color-linha-forte);
+    border-radius: 50%;
+    color: var(--color-nevoa);
+    background: var(--color-noite-2);
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+  .seta:hover { border-color: var(--color-codigo); color: var(--color-codigo); }
+  .seta:focus-visible, .ponto:focus-visible { outline: 2px solid var(--color-codigo); outline-offset: 3px; }
+  .pontos { display: flex; gap: 0.5rem; }
+  .ponto {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: var(--color-linha-forte);
+    transition: width 0.35s ease, background 0.35s ease;
+  }
+  .ponto[aria-current] { width: 28px; background: var(--color-codigo); }
+  .contador {
+    min-width: 4.5rem;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-nevoa-2);
+  }
+  .contador span { color: var(--color-codigo); }
+
+  .progresso {
+    width: min(320px, 70%);
+    height: 2px;
+    margin: 1rem auto 0;
+    overflow: hidden;
+    border-radius: 2px;
+    background: var(--color-linha);
+  }
+  .progresso span { display: block; width: 0; height: 100%; background: var(--color-codigo); }
+  .progresso span.is-correndo { animation: progresso 6s linear forwards; }
+  @keyframes progresso { to { width: 100%; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide, .slide__card, .slide__abrir { transition: none; }
+    .slide[data-ativo] .slide__capa::after { animation: none; }
+  }
+</style>

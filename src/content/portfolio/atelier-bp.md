@@ -6,7 +6,6 @@ summary: Site de um ateliê de impressão 3D e bottons, com um configurador em q
 cover: ./imagens/atelier-bp/hero.webp
 stack: [HTML, CSS, JavaScript, Canvas]
 year: 2026
-featured: false
 order: 4
 draft: false
 ---

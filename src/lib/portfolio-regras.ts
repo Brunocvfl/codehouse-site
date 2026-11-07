@@ -3,7 +3,6 @@
 
 interface Dados {
   draft: boolean;
-  featured: boolean;
   order: number;
   year: number;
   type: string;
@@ -19,9 +18,4 @@ export function montarProjetos<E extends { id: string; data: Dados }>(entradas: 
     .filter((e) => !e.data.draft)
     .sort((a, b) => a.data.order - b.data.order || b.data.year - a.data.year)
     .map((e) => ({ ...e, href: `/portfolio/${e.id}`, rotulo: `${e.data.type} para ${e.data.client}` }));
-}
-
-/** Os primeiros projetos marcados com featured, na ordem do portfólio. */
-export function filtrarDestaques<E extends { data: Dados }>(projetos: readonly E[], limite: number): E[] {
-  return projetos.filter((p) => p.data.featured).slice(0, limite);
 }

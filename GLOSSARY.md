@@ -36,9 +36,9 @@ _Avoid_: case, trabalho, item
 Projeto ainda não publicado; não aparece em nenhuma página do site.
 _Avoid_: oculto, privado
 
-**Destaque**:
-Projeto escolhido para aparecer também na página inicial.
-_Avoid_: featured, favorito
+**Carrossel de Projetos**:
+A seção Projetos da página inicial, que mostra todos os Projetos publicados, na ordem do portfólio.
+_Avoid_: slider, destaques
 
 **Rótulo**:
 A linha que situa o Projeto: o tipo de entrega e para qual cliente.

@@ -6,7 +6,6 @@ summary: Tela touch que leva os colaboradores aos portais de RH, segurança e TI
 cover: ./imagens/totem-de-servicos/padrao.webp
 stack: [Python, Flask, Waitress, JavaScript, CSS]
 year: 2026
-featured: true
 order: 1
 draft: false
 ---

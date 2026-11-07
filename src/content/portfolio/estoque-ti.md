@@ -6,7 +6,6 @@ summary: Sistema para o estoque de equipamentos de TI de quatro fábricas, em qu
 cover: ./imagens/estoque-ti/dashboard-menu.webp
 stack: [Python, Flask, SQLite, Jinja2, JavaScript, CSS]
 year: 2026
-featured: true
 order: 3
 draft: false
 ---

@@ -1,21 +1,18 @@
 ---
-import ProjectCard from './ProjectCard.astro';
+import CarrosselProjetos from './CarrosselProjetos.astro';
 import Icon from './Icon.astro';
-import { getDestaques } from '../lib/portfolio';
+import { getProjetos } from '../lib/portfolio';
 import { SITE } from '../lib/site';
 
-const destaques = await getDestaques(3);
+const projetos = await getProjetos();
 ---
-<section id="portfolio" class="relative border-t border-linha py-24 md:py-32" aria-labelledby="portfolio-titulo">
+<section id="portfolio" class="relative overflow-x-clip border-t border-linha py-24 md:py-32" aria-labelledby="portfolio-titulo">
   <div class="wrap">
-    <div class="flex flex-wrap items-end justify-between gap-6">
-      <h2 id="portfolio-titulo" class="titulo-secao">Projetos</h2>
-      {destaques.length > 0 && <a href="/portfolio" class="btn-linha">Ver todos os projetos</a>}
-    </div>
+    <h2 id="portfolio-titulo" class="titulo-secao">Projetos</h2>
 
-    {destaques.length > 0 ? (
-      <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {destaques.map((p) => <ProjectCard projeto={p} />)}
+    {projetos.length > 0 ? (
+      <div class="mt-12">
+        <CarrosselProjetos projetos={projetos} />
       </div>
     ) : (
       <div class="vazio malha mt-12">
