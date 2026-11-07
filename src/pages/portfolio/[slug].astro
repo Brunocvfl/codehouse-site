@@ -1,10 +1,10 @@
 ---
 import { render } from 'astro:content';
-import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import CtaWhatsApp from '../../components/CtaWhatsApp.astro';
 import TituloProjeto from '../../components/TituloProjeto.astro';
 import ImagemAmpliavel from '../../components/ImagemAmpliavel.astro';
+import ImagemProjeto from '../../components/ImagemProjeto.astro';
 import { getCaminhos, type Projeto } from '../../lib/portfolio';
 
 export async function getStaticPaths() {
@@ -32,7 +32,7 @@ const { Content } = await render(projeto);
     </div>
 
     {d.cover && (
-      <Image src={d.cover} alt={`Tela do projeto ${d.title}`} widths={[800, 1400, 2400]} sizes="(min-width: 1280px) 1200px, 100vw" class="mt-12 w-full rounded-xl border border-linha" />
+      <ImagemProjeto perfil="capa" src={d.cover} alt={`Tela do projeto ${d.title}`} class="mt-12 w-full rounded-xl border border-linha" />
     )}
 
     <div class="prosa mt-12 max-w-2xl">

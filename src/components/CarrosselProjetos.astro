@@ -4,10 +4,11 @@
 // Setas, pontos, teclado (← →), arrastar e clique num card lateral trocam o projeto.
 // Troca sozinho a cada 6 s; pausa com o mouse em cima, com foco, fora da tela ou com
 // "reduzir movimento" ligado. A posição inicial já vem do servidor (funciona sem JS).
-import { Image } from 'astro:assets';
+import ImagemProjeto from './ImagemProjeto.astro';
 import TituloProjeto from './TituloProjeto.astro';
 import type { Projeto } from '../lib/portfolio';
 import { INTERVALO_MS, atributosDoSlide, contador, estadoDoSlide } from '../lib/carrossel';
+import { variaveisDoSlide } from '../lib/imagens';
 
 interface Props {
   projetos: Projeto[];
@@ -16,7 +17,7 @@ const { projetos } = Astro.props;
 const n = projetos.length;
 const inicio = contador(0, n);
 ---
-<div class="carrossel" data-carrossel role="region" aria-roledescription="carrossel" aria-label="Projetos" tabindex="0" style={`--intervalo:${INTERVALO_MS}ms`}>
+<div class="carrossel" data-carrossel role="region" aria-roledescription="carrossel" aria-label="Projetos" tabindex="0" style={`--intervalo:${INTERVALO_MS}ms;${variaveisDoSlide()}`}>
   <div class="palco" data-palco>
     {projetos.map((p, i) => {
       const estado = estadoDoSlide(i, 0, n);
@@ -30,11 +31,7 @@ const inicio = contador(0, n);
         >
           <a href={p.href} class="slide__card" tabindex={estado.ativo ? 0 : -1} draggable="false">
             <div class="slide__capa">
-              {p.data.cover ? (
-                <Image src={p.data.cover} alt="" widths={[640, 960, 1280]} sizes="(min-width: 768px) 440px, 76vw" loading={estado.ativo ? 'eager' : 'lazy'} draggable="false" />
-              ) : (
-                <div class="slide__sem-capa" aria-hidden="true">{'</>'}</div>
-              )}
+              <ImagemProjeto perfil="slide" src={p.data.cover} alt="" loading={estado.ativo ? 'eager' : 'lazy'} draggable="false" />
             </div>
             <div class="slide__texto">
               <p class="slide__rotulo">{p.rotulo}</p>
@@ -171,7 +168,8 @@ const inicio = contador(0, n);
 
 <style>
   .carrossel {
-    --largura: min(440px, 76vw);
+    /* --largura-slide e --fracao-slide vêm do perfil `slide` (src/lib/imagens.ts). */
+    --largura: min(var(--largura-slide), var(--fracao-slide));
     --passo: 64%;
     --giro: -34deg;
     --fundo: 170px;
@@ -294,14 +292,6 @@ const inicio = contador(0, n);
   @keyframes varredura {
     0% { opacity: 1; background-position: 0 120%; }
     100% { opacity: 0; background-position: 0 -20%; }
-  }
-  .slide__sem-capa {
-    display: grid;
-    height: 100%;
-    place-items: center;
-    font-family: var(--font-mono);
-    font-size: 2rem;
-    color: rgb(86 180 224 / 0.6);
   }
 
   .slide__texto { display: flex; flex: 1; flex-direction: column; padding: 1rem 1.15rem 1.15rem; }
