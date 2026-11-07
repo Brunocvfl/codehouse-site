@@ -16,7 +16,7 @@ const d = projeto.data;
 const { Content } = await render(projeto);
 ---
 <Base title={d.title} description={d.summary}>
-  <article class="artigo wrap pb-16 pt-32 md:pb-24 md:pt-40">
+  <article class="wrap pb-16 pt-32 md:pb-24 md:pt-40">
     <a href="/portfolio" class="link-codigo text-sm">Voltar ao portfólio</a>
     <p class="mt-8 text-nevoa-2">{projeto.rotulo}, {d.year}</p>
     <h1 class="mt-2 max-w-3xl text-3xl font-semibold md:text-4xl"><TituloProjeto texto={d.title} /></h1>
@@ -49,16 +49,11 @@ const { Content } = await render(projeto);
   .prosa :global(p) { color: var(--color-nevoa-2); margin: 0 0 1.1rem; }
   .prosa :global(ul) { list-style: disc; padding-left: 1.3rem; color: var(--color-nevoa-2); margin-bottom: 1.1rem; }
   .prosa :global(a) { color: var(--color-codigo); text-decoration: underline; }
-  /* O texto fica numa coluna estreita, mas as imagens ocupam a largura toda do artigo
-     (a mesma da capa), para as telas dos projetos ficarem legíveis. */
-  .artigo { container-type: inline-size; }
   .prosa :global(img) {
     display: block;
-    width: 100cqi;
-    max-width: none;
+    width: 100%;
     height: auto;
-    margin: 2rem 0;
+    margin: 1.5rem 0;
     border-radius: 0.75rem;
-    border: 1px solid var(--color-linha);
   }
 </style>

@@ -36,7 +36,7 @@ const dois = (x: number) => String(x).padStart(2, '0');
           <a href={p.href} class="slide__card" tabindex={d === 0 ? 0 : -1} draggable="false">
             <div class="slide__capa">
               {p.data.cover ? (
-                <Image src={p.data.cover} alt="" widths={[640, 960, 1280]} sizes="(min-width: 768px) 640px, 80vw" loading={d === 0 ? 'eager' : 'lazy'} draggable="false" />
+                <Image src={p.data.cover} alt="" widths={[640, 960, 1280]} sizes="(min-width: 768px) 440px, 76vw" loading={d === 0 ? 'eager' : 'lazy'} draggable="false" />
               ) : (
                 <div class="slide__sem-capa" aria-hidden="true">{'</>'}</div>
               )}
@@ -180,15 +180,15 @@ const dois = (x: number) => String(x).padStart(2, '0');
 
 <style>
   .carrossel {
-    --largura: min(640px, 82vw);
-    --passo: 62%;
-    --giro: -36deg;
-    --fundo: 220px;
+    --largura: min(440px, 76vw);
+    --passo: 64%;
+    --giro: -34deg;
+    --fundo: 170px;
     position: relative;
     outline: none;
   }
   @media (max-width: 767px) {
-    .carrossel { --passo: 74%; --giro: -24deg; --fundo: 160px; }
+    .carrossel { --passo: 74%; --giro: -24deg; --fundo: 120px; }
   }
 
   /* Palco em perspectiva: todos os slides no mesmo lugar da grade, deslocados por transform. */
@@ -209,8 +209,8 @@ const dois = (x: number) => String(x).padStart(2, '0');
     grid-area: 1 / 1;
     align-self: end;
     justify-self: center;
-    width: min(900px, 100%);
-    height: 80px;
+    width: min(700px, 100%);
+    height: 60px;
     margin-bottom: -10px;
     background: radial-gradient(closest-side, rgb(86 180 224 / 0.22), transparent);
     filter: blur(8px);
@@ -313,15 +313,15 @@ const dois = (x: number) => String(x).padStart(2, '0');
     color: rgb(86 180 224 / 0.6);
   }
 
-  .slide__texto { display: flex; flex: 1; flex-direction: column; padding: 1.25rem 1.4rem 1.4rem; }
-  .slide__rotulo { font-size: 0.875rem; color: var(--color-nevoa-2); }
-  .slide__titulo { margin-top: 0.3rem; font-size: 1.2rem; }
-  .slide__resumo { margin-top: 0.55rem; font-size: 0.9rem; line-height: 1.55; color: var(--color-nevoa-2); }
+  .slide__texto { display: flex; flex: 1; flex-direction: column; padding: 1rem 1.15rem 1.15rem; }
+  .slide__rotulo { font-size: 0.8rem; color: var(--color-nevoa-2); }
+  .slide__titulo { margin-top: 0.25rem; font-size: 1.05rem; }
+  .slide__resumo { margin-top: 0.45rem; font-size: 0.85rem; line-height: 1.5; color: var(--color-nevoa-2); }
   .slide__abrir {
     margin-top: auto;
-    padding-top: 1rem;
+    padding-top: 0.8rem;
     font-family: var(--font-mono);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--color-codigo);
     opacity: 0;
     transition: opacity 0.4s ease 0.2s;
